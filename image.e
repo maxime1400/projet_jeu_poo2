@@ -22,7 +22,7 @@ feature {NONE} -- Initialization
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make ("./images/fond_terrain.png")
+			create l_image.make ("./images/terrain.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
