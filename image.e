@@ -1,11 +1,8 @@
 note
-	description : "Démarrage du jeu et menu d'accueil"
-<<<<<<< HEAD
-	auteur		: "Steve Duquet, Maxime Laflamme"
-=======
-	auteur		: "Steve Duquet"
->>>>>>> cfee2de2413667e85b325f0cb1180dcc3631e7f1
-	date        : "16 février 2016"
+	description: "The application background"
+	author: "Louis Marchand"
+	date: "Wed, 01 Apr 2015 18:46:46 +0000"
+	revision: "2.0"
 
 class
 	IMAGE
@@ -19,13 +16,13 @@ inherit
 create
 	default_create
 
-feature {NONE} -- Constructeur
+feature {NONE} -- Initialization
 
 	default_create
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make ("./images/fond_accueil.png")
+			create l_image.make ("./images/fond_terrain.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
