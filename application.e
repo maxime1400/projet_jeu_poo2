@@ -1,6 +1,10 @@
 note
 	description : "Démarrage du jeu et menu d'accueil"
+<<<<<<< HEAD
 	auteur		: "Steve Duquet, Maxime Laflamme"
+=======
+	auteur		: "Steve Duquet"
+>>>>>>> cfee2de2413667e85b325f0cb1180dcc3631e7f1
 	date        : "16 février 2016"
 
 class
