@@ -1,10 +1,10 @@
 note
 	description : "[
 					Moteur principal du jeu. 
-					Affiche le terrain et les personnages.
-					Gère les déplacements et les touches.
+					Affiche le terrain et le personnage.
+					Gère les touches et exécute les déplacements.
 				]"
-	auteur		: "Steve Duquet"
+	auteur		: "Steve Duquet et Maxime Laflamme"
 	date        : "16 février 2016"
 
 class
@@ -39,12 +39,12 @@ feature {NONE} -- Constructeur
 			create l_fond
 			if not l_fond.has_error then
 				create l_maryo
-				l_maryo.y := 375
-				l_maryo.x := 200
+				l_maryo.y := 250
+				l_maryo.x := 250
 				if not l_maryo.has_error then
 					create l_window_builder
 					l_window_builder.set_dimension (500, 500)
-					l_window_builder.set_title ("Example Animation with optimization")
+					l_window_builder.set_title ("Combats épiques")
 					l_window := l_window_builder.generate_window
 					game_library.quit_signal_actions.extend (agent on_quit)
 					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_maryo))
@@ -54,7 +54,7 @@ feature {NONE} -- Constructeur
 					last_redraw_time := game_library.time_since_create
 					game_library.launch
 				else
-					print("Cannot create the Maryo surface.")
+					print("Impossible de créer le personnage.")
 				end
 			else
 				print("Impossible de créer la surface de fond.")
@@ -127,6 +127,10 @@ feature {NONE} -- Implémentation
 					a_maryo.go_right(a_timestamp)
 				elseif a_key_state.is_left then
 					a_maryo.go_left(a_timestamp)
+				elseif a_key_state.is_up then
+					a_maryo.go_up(a_timestamp)
+				elseif a_key_state.is_down then
+					a_maryo.go_down(a_timestamp)
 				end
 			end
 
@@ -140,6 +144,10 @@ feature {NONE} -- Implémentation
 					a_maryo.stop_right
 				elseif a_key_state.is_left then
 					a_maryo.stop_left
+				elseif a_key_state.is_up then
+					a_maryo.stop_up
+				elseif a_key_state.is_down then
+					a_maryo.stop_down
 				end
 			end
 		end
