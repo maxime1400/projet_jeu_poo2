@@ -36,7 +36,7 @@ feature {NONE} -- Constructeur
 			l_maryo:MARYO
 			l_window:GAME_WINDOW_SURFACED
 		do
-			create l_fond
+			create l_fond.default_create("./images/terrain.png")
 			if not l_fond.has_error then
 				create l_maryo
 				l_maryo.y := 250

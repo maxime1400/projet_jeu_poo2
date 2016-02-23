@@ -1,32 +1,25 @@
 note
-	description: "The application background"
-	author: "Louis Marchand"
-	date: "Wed, 01 Apr 2015 18:46:46 +0000"
-	revision: "2.0"
+	description: "Class qui génère une image"
+	auteur		: "Steve Duquet"
+	date        : "23 février 2016"
 
 class
 	IMAGE
 
-inherit
-	GAME_SURFACE
-		redefine
-			default_create
-		end
-
 create
-	default_create
+	creer_image
 
 feature {NONE} -- Initialization
 
-	default_create
+	creer_image (a_nom_fichier:STRING)
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make ("./images/terrain.png")
+			create l_image.make (a_nom_fichier)
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
-					make_from_image (l_image)
+					GAME_SURFACE.make_from_image (l_image)
 				else
 					has_error := True
 					make(1,1)
