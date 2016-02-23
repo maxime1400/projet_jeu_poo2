@@ -92,16 +92,16 @@ feature -- Access
 				if l_delta_time // movement_delta > 0 then
 					if going_right then
 						surface := right_surface
-						x := x + (l_delta_time // movement_delta).to_integer_32
+						x := x + (l_delta_time // movement_delta * 2).to_integer_32
 					elseif going_left then
 						surface := left_surface
-						x := x - (l_delta_time // movement_delta).to_integer_32
+						x := x - (l_delta_time // movement_delta * 2).to_integer_32
 					elseif going_up then
 						surface := up_surface
-						y := y - (l_delta_time // movement_delta).to_integer_32
+						y := y - (l_delta_time // movement_delta * 2).to_integer_32
 					elseif going_down then
 						surface := down_surface
-						y := y + (l_delta_time // movement_delta).to_integer_32
+						y := y + (l_delta_time // movement_delta * 2).to_integer_32
 					end
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
 					is_dirty := True
