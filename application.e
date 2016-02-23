@@ -36,7 +36,7 @@ feature {NONE} -- Constructeur
 			l_maryo:MARYO
 			l_window:GAME_WINDOW_SURFACED
 		do
-			create l_fond.default_create("./images/terrain.png")
+			create l_fond
 			if not l_fond.has_error then
 				create l_maryo
 				l_maryo.y := 250
@@ -91,8 +91,12 @@ feature {NONE} -- Implémentation
 				-- S'assure que Maryo ne sort pas de l'écran
 				if a_maryo.x < 0 then
 					a_maryo.x := 0
+				elseif a_maryo.y < 0 then
+					a_maryo.y := 0
 				elseif a_maryo.x + a_maryo.sub_image_width > a_IMAGE.width then
 					a_maryo.x := a_IMAGE.width - a_maryo.sub_image_width
+				elseif a_maryo.y + a_maryo.sub_image_height > a_IMAGE.height then
+					a_maryo.y := a_IMAGE.height - a_maryo.sub_image_height
 				end
 
 				-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
