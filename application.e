@@ -11,8 +11,11 @@ class
 	APPLICATION
 
 inherit
-	GAME_LIBRARY_SHARED		-- Pour utiliser `game_library'
-	IMG_LIBRARY_SHARED		-- Pour utiliser `image_file_library'
+	GAME_LIBRARY_SHARED		-- To use `game_library'
+	GAME_LIBRARY_SHARED		-- To use `game_library'
+	IMG_LIBRARY_SHARED		-- To use `image_file_library'
+	AUDIO_LIBRARY_SHARED	-- To use `audio_library'
+	EXCEPTIONS
 
 create
 	make
@@ -22,9 +25,11 @@ feature {NONE} -- Constructeur
 	make
 		do
 			game_library.enable_video -- Active les fonctionnalités vidéo
+			audio_library.enable_sound
 			image_file_library.enable_image (true, false, false)  -- Active le format d'image PNG (mais pas TIF ou JPG)
 			run_game  -- Exécute le créateur de base du jeu
 			image_file_library.quit_library  -- Dissocie  correctement  la bibliothèque de fichiers images
+			audio_library.quit_library
 			game_library.quit_library  -- Efface la bibliothèque avant de quitter
 		end
 
@@ -125,8 +130,35 @@ feature {NONE} -- Implémentation
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_maryo:MARYO)
 			-- Action quand une touche du clavier a été poussée
+		local
+			l_sound:AUDIO_SOUND_FILE
+			sound_source:AUDIO_SOURCE	-- You need one source for each sound you want to be playing at the same time.
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
+
+				if a_key_state.is_right or a_key_state.is_left or a_key_state.is_up or a_key_state.is_down then
+					create l_sound.make ("sound.aif")			-- This sound will be played when the user press the space bar.
+					if l_sound.is_openable then
+						l_sound.open
+						if l_sound.is_open then
+							audio_library.sources_add
+							sound_source:=audio_library.last_source_added	-- The second source will be use for playing the space sound
+						
+							sound_source.queue_sound (l_sound)	-- Queud the sound into the source queue
+							sound_source.play					-- Play the source
+
+
+
+
+						else
+							print("Cannot open sound files.")
+							die(1)
+						end
+					else
+						print("Sound files not valid.")
+						die(1)
+					end
+				end
 				if a_key_state.is_right then
 					a_maryo.go_right(a_timestamp)
 				elseif a_key_state.is_left then
@@ -137,7 +169,6 @@ feature {NONE} -- Implémentation
 					a_maryo.go_down(a_timestamp)
 				end
 			end
-
 		end
 
 	on_key_released(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_maryo:MARYO)
