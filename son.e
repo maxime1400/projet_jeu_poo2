@@ -1,5 +1,5 @@
 note
-	description : "Moteur principal du jeu"
+	description : "Génère un son à partir d'un fichier"
 	auteur		: "Steve Duquet"
 	date        : "1 mars 2016"
 
