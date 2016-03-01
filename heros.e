@@ -1,14 +1,10 @@
 note
-	description: "[
-					Our main character.
-					Using animation with 4 states using 3 sub images
-				]"
-	author: "Louis Marchand"
-	date: "Wed, 01 Apr 2015 18:46:46 +0000"
-	revision: "2.0"
+	description : "Personnage principal"
+	auteur		: "Steve Duquet et Maxime Laflamme"
+	date        : "16 février 2016"
 
 class
-	MARYO
+	HEROS
 
 inherit
 	GAME_LIBRARY_SHARED
@@ -19,10 +15,10 @@ inherit
 create
 	default_create
 
-feature {NONE} -- Initialization
+feature {NONE} -- Constructeur
 
 	default_create
-			-- Initialization of `Current'
+			-- Constructeur de `Current'
 		local
 			l_image:IMG_IMAGE_FILE
 		do
@@ -57,10 +53,10 @@ feature {NONE} -- Initialization
 		end
 
 	initialize_animation_coordinate
-			-- Create the `animation_coordinates'
+			-- Création de `animation_coordinates'
 		do
 			create {ARRAYED_LIST[TUPLE[x,y:INTEGER]]} animation_coordinates.make(4)
-			animation_coordinates.extend ([surface.width // 3, 0])	-- Be sure to place the image standing still first
+			animation_coordinates.extend ([surface.width // 3, 0])
 			animation_coordinates.extend ([0, 0])
 			animation_coordinates.extend ([(surface.width // 3) * 2, 0])
 			animation_coordinates.extend ([0, 0])
@@ -68,14 +64,13 @@ feature {NONE} -- Initialization
 			sub_image_y := animation_coordinates.at (1).y
 		end
 
-feature -- Access
+feature -- Accès
 
 	has_error:BOOLEAN
-			-- Is an error happen when initializing the `surface'
+			-- Est-ce qu'une erreur est survenue lors de l'initialisation de `surface'
 
 	update(a_timestamp:NATURAL_32)
-			-- Update the surface depending on the present `a_timestamp'.
-			-- Each 100 ms, the image change; each 10ms `Current' is moving
+			-- Mise à jour de la surface en fonction de la présente `to_timestamp'
 		local
 			l_coordinate:TUPLE[x,y:INTEGER]
 			l_delta_time:NATURAL_32
@@ -110,97 +105,97 @@ feature -- Access
 		end
 
 	go_left(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move left
+			-- `Current' commence à se déplacer vers la gauche
 		do
 			old_timestamp := a_timestamp
 			going_left := True
 		end
 
 	go_right(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move right
+			-- `Current' commence à se déplacer vers la droite
 		do
 			old_timestamp := a_timestamp
 			going_right := True
 		end
 
 	go_up(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move up
+			-- `Current' commence à se déplacer vers le haut
 		do
 			old_timestamp := a_timestamp
 			going_up := True
 		end
 
 	go_down(a_timestamp:NATURAL_32)
-			-- Make `Current' starting to move down
+			-- `Current' commence à se déplacer vers le bas
 		do
 			old_timestamp := a_timestamp
 			going_down := True
 		end
 
 	stop_left
-			-- Make `Current' stop moving to the left
+			-- `Current' arrête de se déplacer vers la gauce
 		do
 			going_left := False
 			if not going_right then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 				is_dirty := True
 			end
 		end
 
 	stop_right
-			-- Make `Current' stop moving to the right
+			-- `Current' arrête de se déplacer vers la droite
 		do
 			going_right := False
 			if not going_left then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 				is_dirty := True
 			end
 		end
 
 	stop_up
-			-- Make `Current' stop moving to the left
+			-- `Current'  arrête de se déplacer vers le bas
 		do
 			going_up := False
 			if not going_down then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 				is_dirty := True
 			end
 		end
 
 	stop_down
-			-- Make `Current' stop moving to the right
+			-- `Current'  arrête de se déplacer vers le haut
 		do
 			going_down := False
 			if not going_up then
-				sub_image_x := animation_coordinates.first.x	-- Place the image standing still
-				sub_image_y := animation_coordinates.first.y	-- Place the image standing still
+				sub_image_x := animation_coordinates.first.x
+				sub_image_y := animation_coordinates.first.y
 				is_dirty := True
 			end
 		end
 
 	going_left:BOOLEAN
-			-- Is `Current' moving left
+			-- Est-ce que `Current' se déplace à gauche
 
 	going_right:BOOLEAN
-			-- Is `Current' moving right
+			--Est-ce que `Current' se déplace à droite
 
 	going_up:BOOLEAN
-			-- Is `Current' moving up
+			-- Est-ce que `Current' se déplace vers le haut
 
 	going_down:BOOLEAN
-			-- Is `Current' moving down
+			-- Est-ce que `Current' se déplace vers le bas
 
 	x:INTEGER assign set_x
-			-- Vertical position of `Current'
+			-- Position verticale de `Current'
 
 	y:INTEGER assign set_y
-			-- Horizontal position of `Current'
+			-- Position horizontale de `Current'
 
 	set_x(a_x:INTEGER)
-			-- Assign the value of `x' with `a_x'
+			-- Attribue la valeur de `x' avec` a_x'
 		do
 			x := a_x
 		ensure
@@ -208,7 +203,7 @@ feature -- Access
 		end
 
 	set_y(a_y:INTEGER)
-			-- Assign the value of `y' with `a_y'
+			--  Attribue la valeur de `y' avec` a_y'
 		do
 			y := a_y
 		ensure
@@ -216,38 +211,38 @@ feature -- Access
 		end
 
 	sub_image_x, sub_image_y:INTEGER
-			-- Position of the portion of image to show inside `surface'
+			-- Position de la partie de l'image pour montrer à l'intérieur de la `surface '
 
 	sub_image_width, sub_image_height:INTEGER
-			-- Dimension of the portion of image to show inside `surface'
+			-- Dimension de la partie de l'image pour montrer à l'intérieur de la `surface '
 
 	surface:GAME_SURFACE
-			-- The surface to use when drawing `Current'
+			-- La surface à utiliser lors de l'élaboration de `actuelle'
 
 	is_dirty:BOOLEAN
-			-- If True, `Current' has been modified and have to be redraw.
+			-- Si vrai, `actuel' a été modifié et doit être redessiné.
 
 	unset_dirty
-			-- `Current's modification have been managed so set `is_dirty' to False
+			-- `Current' a été gérée donc `is_dirty' est mis à faux
 		do
 			is_dirty := False
 		end
 
-feature {NONE} -- implementation
+feature {NONE} -- implémentation
 
 	animation_coordinates:LIST[TUPLE[x,y:INTEGER]]
-			-- Every coordinate of portion of images in `surface'
+			-- Chaque coordonnée de la partie des images dans `surface'
 
 	old_timestamp:NATURAL_32
-			-- When appen the last movement (considering `movement_delta')
+			-- Quand est arrivé le dernier mouvement (en considérant le mouvement `delta')
 
 feature {NONE} -- constants
 
 	movement_delta:NATURAL_32 = 10
-			-- The delta time between each movement of `Current'
+			-- Le temps delta entre chaque mouvement de `actuel'
 
 	animation_delta:NATURAL_32 = 100
-			-- The delta time between each animation of `Current'
+			-- Le temps delta entre chaque animation de `actuel'
 
 	left_surface:GAME_SURFACE
 

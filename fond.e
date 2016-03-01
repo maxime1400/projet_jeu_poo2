@@ -1,8 +1,7 @@
 note
-	description: "The application background"
-	author: "Louis Marchand"
-	date: "Wed, 01 Apr 2015 18:46:46 +0000"
-	revision: "2.0"
+	description : "Moteur principal du jeu"
+	auteur		: "Steve Duquet et Maxime Laflamme"
+	date        : "16 février 2016"
 
 class
 	IMAGE
@@ -16,13 +15,13 @@ inherit
 create
 	default_create
 
-feature {NONE} -- Initialization
+feature {NONE} -- Constructeur
 
 	default_create
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make ("./images/terrain.png")
+			create l_image.make("./images/terrain.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
