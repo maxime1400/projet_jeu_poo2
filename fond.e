@@ -4,7 +4,7 @@ note
 	date        : "16 février 2016"
 
 class
-	IMAGE
+	FOND
 
 inherit
 	GAME_SURFACE

@@ -32,7 +32,7 @@ feature {NONE} -- Constructeur
 			-- Création des ressources et lancement du jeu
 		local
 			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
-			l_fond:IMAGE
+			l_fond:FOND
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
 		do
