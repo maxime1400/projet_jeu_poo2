@@ -11,6 +11,14 @@ inherit
 		redefine
 			default_create
 		end
+	AUDIO_LIBRARY_SHARED
+	redefine
+		default_create
+	end
+	EXCEPTIONS
+	redefine
+		default_create
+	end
 
 create
 	default_create
@@ -49,7 +57,30 @@ feature {NONE} -- Constructeur
 			end
 			surface := right_surface
 			initialize_animation_coordinate
+			initialize_sound
 			is_dirty := True
+		end
+
+	initialize_sound
+			-- Création de `sound_source'
+		local
+--			l_sound:AUDIO_SOUND_FILE
+		do
+			create l_sound.make ("./sons/marche.ogg")
+			if l_sound.is_openable then
+				l_sound.open
+				if l_sound.is_open then
+					audio_library.sources_add
+					sound_source:=audio_library.last_source_added
+
+				else
+					print("Impossible d'ouvrir le fichier audio.")
+					die(1)
+				end
+			else
+				print("Fichier audio non valide.")
+				die(1)
+			end
 		end
 
 	initialize_animation_coordinate
@@ -88,15 +119,31 @@ feature -- Accès
 					if going_right then
 						surface := right_surface
 						x := x + (l_delta_time // movement_delta * 2).to_integer_32
+						if not sound_source.is_playing then
+							sound_source.queue_sound (l_sound)
+							sound_source.play
+						end
 					elseif going_left then
 						surface := left_surface
 						x := x - (l_delta_time // movement_delta * 2).to_integer_32
+						if not sound_source.is_playing then
+							sound_source.queue_sound (l_sound)
+							sound_source.play
+						end
 					elseif going_up then
 						surface := up_surface
 						y := y - (l_delta_time // movement_delta * 2).to_integer_32
+						if not sound_source.is_playing then
+							sound_source.queue_sound (l_sound)
+							sound_source.play
+						end
 					elseif going_down then
 						surface := down_surface
 						y := y + (l_delta_time // movement_delta * 2).to_integer_32
+						if not sound_source.is_playing then
+							sound_source.queue_sound (l_sound)
+							sound_source.play
+						end
 					end
 					old_timestamp := old_timestamp + (l_delta_time // movement_delta) * movement_delta
 					is_dirty := True
@@ -229,6 +276,10 @@ feature -- Accès
 		end
 
 feature {NONE} -- implémentation
+
+	l_sound:AUDIO_SOUND_FILE
+
+	sound_source:AUDIO_SOURCE
 
 	animation_coordinates:LIST[TUPLE[x,y:INTEGER]]
 			-- Chaque coordonnée de la partie des images dans `surface'

@@ -136,9 +136,6 @@ feature {NONE} -- Implémentation
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
 
-				if a_key_state.is_right or a_key_state.is_left or a_key_state.is_up or a_key_state.is_down then
-					create l_son.make("./sons/marche.ogg")
-				end
 				if a_key_state.is_right then
 					a_heros.go_right(a_timestamp)
 				elseif a_key_state.is_left then
