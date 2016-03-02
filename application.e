@@ -35,7 +35,9 @@ feature {NONE} -- Constructeur
 			l_fond:FOND
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
+			l_musique:MUSIQUE
 		do
+			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
 			if not l_fond.has_error then
 				create l_heros
@@ -59,6 +61,7 @@ feature {NONE} -- Constructeur
 			else
 				print("Impossible de créer la surface de fond.")
 			end
+
 		end
 
 
@@ -69,7 +72,10 @@ feature {NONE} -- Implémentation
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
 			l_must_redraw:BOOLEAN
+			l_musique:AUDIO_SOUND_FILE
+			musique_source:AUDIO_SOURCE	-- On a besoin d'une source pour chaque son qu'on veux jouer en même temps
 		do
+
 			l_must_redraw := a_must_redraw
 			if (game_library.time_since_create - last_redraw_time) > 1000 then	-- Chaque seconde, redessine la totalité de l'écran
 				l_must_redraw := True
@@ -126,30 +132,9 @@ feature {NONE} -- Implémentation
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
 		local
-			l_sound:AUDIO_SOUND_FILE
-			sound_source:AUDIO_SOURCE	-- On a besoin d'une source pour chaque son qu'on veux jouer en même temps
+			l_son:SON
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
-
-				if a_key_state.is_right or a_key_state.is_left or a_key_state.is_up or a_key_state.is_down then
-					-- Création d'un son à chaque fois qu'on appuie sur une touche de direction
-					create l_sound.make ("sons/marche.ogg")
-					if l_sound.is_openable then
-						l_sound.open
-						if l_sound.is_open then
-							audio_library.sources_add
-							sound_source:=audio_library.last_source_added
-							sound_source.queue_sound (l_sound)
-							sound_source.play
-						else
-							print("Impossible d'ouvrir le fichier audio.")
-							die(1)
-						end
-					else
-						print("Fichier audio non valide.")
-						die(1)
-					end
-				end
 
 				if a_key_state.is_right then
 					a_heros.go_right(a_timestamp)
