@@ -36,6 +36,7 @@ feature {NONE} -- Initialization
 					l_sound.open
 					if l_sound.is_open then
 						audio_library.sources_add					-- Create a new sound source
+						audio_library.last_source_added.set_gain (0.32)
 						audio_library.last_source_added.queue_sound_infinite_loop (l_sound)	-- Queued the sound in the newly created source
 						audio_library.last_source_added.play			-- Play the source.		
 					end
