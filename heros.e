@@ -2,6 +2,7 @@ note
 	description : "Personnage principal"
 	auteur		: "Steve Duquet et Maxime Laflamme"
 	date        : "16 février 2016"
+	source		: "maryo.e de Louis Marchand"
 
 class
 	HEROS
