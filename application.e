@@ -21,7 +21,14 @@ feature {NONE} -- Constructeur
 		do
 			game_library.enable_video
 			audio_library.enable_sound
+			audio_library.launch_in_thread	-- This feature update the sound context in another thread.
+							-- With this functionnality, the application is more performant
+							-- on multi-core computer. It is also more easy to program the other
+							-- aspect of the application because you dont have to think about using
+							-- the audio_library.update reguraly. If you use precompile library,
+							-- these library must be precompile with multi-thread enable.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
+			
 			run_game
 			image_file_library.quit_library
 			audio_library.quit_library
@@ -67,7 +74,7 @@ feature {NONE} -- Constructeur
 
 feature {NONE} -- Implémentation
 
-	on_iteration(a_timestamp:NATURAL_32; a_heros:HEROS; a_IMAGE:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED; a_must_redraw:BOOLEAN)
+	on_iteration(a_timestamp:NATURAL_32; a_heros:HEROS; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED; a_must_redraw:BOOLEAN)
 			-- Événement qui est lancé à chaque itération
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
@@ -99,10 +106,10 @@ feature {NONE} -- Implémentation
 					a_heros.x := 0
 				elseif a_heros.y < 0 then
 					a_heros.y := 0
-				elseif a_heros.x + a_heros.sub_image_width > a_IMAGE.width then
-					a_heros.x := a_IMAGE.width - a_heros.sub_image_width
-				elseif a_heros.y + a_heros.sub_image_height > a_IMAGE.height then
-					a_heros.y := a_IMAGE.height - a_heros.sub_image_height
+				elseif a_heros.x + a_heros.sub_image_width > a_image.width then
+					a_heros.x := a_image.width - a_heros.sub_image_width
+				elseif a_heros.y + a_heros.sub_image_height > a_image.height then
+					a_heros.y := a_image.height - a_heros.sub_image_height
 				end
 
 				-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
@@ -112,7 +119,7 @@ feature {NONE} -- Implémentation
 									l_area_dirty.first.width, l_area_dirty.first.height
 								)
 				l_window.surface.draw_sub_surface (
-									a_IMAGE,
+									a_image,
 									l_area_dirty.first.x, l_area_dirty.first.y,
 									l_area_dirty.first.width, l_area_dirty.first.height,
 									l_area_dirty.first.x, l_area_dirty.first.y
