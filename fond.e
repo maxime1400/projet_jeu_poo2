@@ -1,7 +1,10 @@
 note
-	description : "Moteur principal du jeu"
-	auteur		: "Steve Duquet et Maxime Laflamme"
-	date        : "16 février 2016"
+	description		: "Le fond d'écran principal du programme"
+	original		: "desert.e"
+	auteur			: "Louis Marchand"
+	date			: "1er avril 2015"
+	source			: "https://github.com/tioui/Eiffel_Game2.git"
+	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
 	FOND

@@ -1,5 +1,5 @@
 note
-	description : "Moteur principal du jeu"
+	description : "Démarrage du jeu"
 	auteur		: "Steve Duquet et Maxime Laflamme"
 	date        : "16 février 2016"
 

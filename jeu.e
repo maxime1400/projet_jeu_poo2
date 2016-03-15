@@ -1,7 +1,10 @@
 note
-	description : "Moteur principal du jeu"
-	auteur		: "Steve Duquet et Maxime Laflamme"
-	date        : "16 février 2016"
+	description 	: "Moteur principal du jeu"
+	original		: "application.e"
+	auteur			: "Louis Marchand"
+	date			: "28 mars 2015"
+	source			: "https://github.com/tioui/Eiffel_Game2.git"
+	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
 	JEU
