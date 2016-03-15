@@ -138,8 +138,6 @@ feature {NONE} -- Implémentation
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
-		local
-			l_son:SON
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
 

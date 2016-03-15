@@ -18,8 +18,9 @@
 		<cluster name="projet_jeu_poo2" location=".\" recursive="true">
 			<file_rule>
 				<exclude>/EIFGENs$</exclude>
-				<exclude>/CVS$</exclude>
-				<exclude>/.svn$</exclude>
+				<exclude>/.git$</exclude>
+				<exclude>/images$</exclude>
+				<exclude>/sons$</exclude>
 			</file_rule>
 		</cluster>
 	</target>
