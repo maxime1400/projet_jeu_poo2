@@ -123,6 +123,7 @@ feature -- Accès
 						surface := right_surface
 						x := x + (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
+							compteur_pas:= compteur_pas + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -278,6 +279,12 @@ feature -- Accès
 			is_dirty := False
 		end
 
+	get_compteur_pas:NATURAL_32
+			-- retourne le nombre de pas
+		do
+			result:= compteur_pas
+		end
+
 feature {NONE} -- implémentation
 
 	l_sound:AUDIO_SOUND_FILE
@@ -290,7 +297,7 @@ feature {NONE} -- implémentation
 	old_timestamp:NATURAL_32
 			-- Quand est arrivé le dernier mouvement (en considérant le mouvement `delta')
 
-feature {NONE} -- constants
+feature {NONE} -- variables
 
 	movement_delta:NATURAL_32 = 10
 			-- Le temps delta entre chaque mouvement de `actuel'
@@ -305,5 +312,7 @@ feature {NONE} -- constants
 	up_surface:GAME_SURFACE
 
 	down_surface:GAME_SURFACE
+
+	compteur_pas:NATURAL_32
 
 end

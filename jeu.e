@@ -46,9 +46,11 @@ feature {NONE} -- Constructeur
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
+			l_combat:COMBAT
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
+			create l_combat.make_combat
 			if not l_fond.has_error then
 				create l_heros
 				l_heros.y := 250
@@ -82,8 +84,6 @@ feature {NONE} -- Implémentation
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
 			l_must_redraw:BOOLEAN
-			l_musique:AUDIO_SOUND_FILE
-			musique_source:AUDIO_SOURCE	-- On a besoin d'une source pour chaque son qu'on veux jouer en même temps
 		do
 
 			l_must_redraw := a_must_redraw
@@ -134,16 +134,17 @@ feature {NONE} -- Implémentation
 				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
 				l_window.update_rectangles (l_area_dirty)
 			end
-
-
 		end
 
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
 		do
+			io.put_natural_32 (a_heros.get_compteur_pas)
+			if a_heros.get_compteur_pas > 10 then
+				io.put_string ("Bravo!!! 10 pas !!!")
+			end
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
-
 				if a_key_state.is_right then
 					a_heros.go_right(a_timestamp)
 				elseif a_key_state.is_left then
