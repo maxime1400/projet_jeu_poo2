@@ -41,11 +41,9 @@ feature {NONE} -- Constructeur
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
-			l_combat:COMBAT
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
-			create l_combat.make_combat
 			if not l_fond.has_error then
 				create l_heros
 				l_heros.y := 250
