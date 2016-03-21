@@ -134,10 +134,12 @@ feature {NONE} -- Implémentation
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
+		local
+			l_combat:COMBAT
 		do
-			io.put_natural_32 (a_heros.get_compteur_pas)
 			if a_heros.get_compteur_pas > 10 then
-				io.put_string ("Bravo!!! 10 pas !!!")
+				a_heros.set_compteur_pas (0)
+					create l_combat.make_combat
 			end
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
 				if a_key_state.is_right then

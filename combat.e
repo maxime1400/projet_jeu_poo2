@@ -14,11 +14,6 @@ feature {NONE} -- Constructeur
 	make_combat
 		-- Création des paramètres de base d'un jeu
 		do
-		end
-
-	debut_combat
-		-- Début d'un caombat
-		do
 			io.put_string("Début d'un combat!!! Bravo!!!")
 		end
 

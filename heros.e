@@ -129,6 +129,7 @@ feature -- Accès
 						surface := left_surface
 						x := x - (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
+							compteur_pas:= compteur_pas + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -136,6 +137,7 @@ feature -- Accès
 						surface := up_surface
 						y := y - (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
+							compteur_pas:= compteur_pas + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -143,6 +145,7 @@ feature -- Accès
 						surface := down_surface
 						y := y + (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
+							compteur_pas:= compteur_pas + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -281,6 +284,12 @@ feature -- Accès
 			-- retourne le nombre de pas
 		do
 			result:= compteur_pas
+		end
+
+	set_compteur_pas(a_nombre:NATURAL_32)
+			-- modifie le nombre de pas
+		do
+			compteur_pas:= a_nombre
 		end
 
 feature {NONE} -- implémentation
