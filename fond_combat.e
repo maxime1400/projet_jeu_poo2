@@ -1,5 +1,5 @@
 note
-	description		: "Le fond d'écran principal du programme"
+	description		: "Le fond d'écran d'un combat"
 	original		: "desert.e"
 	auteur			: "Louis Marchand"
 	date			: "1er avril 2015"
@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	FOND
+	FOND_COMBAT
 
 inherit
 	GAME_SURFACE
@@ -24,7 +24,7 @@ feature {NONE} -- Constructeur
 		local
 			l_image: IMG_IMAGE_FILE
 		do
-			create l_image.make("./images/terrain.png")
+			create l_image.make("./images/fond_combat.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then

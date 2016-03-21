@@ -37,7 +37,7 @@ feature {NONE} -- Constructeur
 			-- Création des ressources et lancement du jeu
 		local
 			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
-			l_fond:FOND
+			l_fond:FOND_JEU
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
@@ -77,8 +77,8 @@ feature {NONE} -- Implémentation
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
 			l_must_redraw:BOOLEAN
+			l_combat:COMBAT
 		do
-
 			l_must_redraw := a_must_redraw
 			if (game_library.time_since_create - last_redraw_time) > 1000 then	-- Chaque seconde, redessine la totalité de l'écran
 				l_must_redraw := True
@@ -91,6 +91,11 @@ feature {NONE} -- Implémentation
 			else
 				-- Redessine seulement l'endroit où était le personnage
 				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
+			end
+
+			if a_heros.get_compteur_pas > 10 then
+				a_heros.set_compteur_pas (0)
+				create l_combat.make_window(l_window, l_area_dirty)
 			end
 
 			a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -132,13 +137,7 @@ feature {NONE} -- Implémentation
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
-		local
-			l_combat:COMBAT
 		do
-			if a_heros.get_compteur_pas > 10 then
-				a_heros.set_compteur_pas (0)
-					create l_combat.make_combat
-			end
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
 				if a_key_state.is_right then
 					a_heros.go_right(a_timestamp)
