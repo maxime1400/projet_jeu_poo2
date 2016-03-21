@@ -24,12 +24,7 @@ feature {NONE} -- Constructeur
 		do
 			game_library.enable_video
 			audio_library.enable_sound
-			audio_library.launch_in_thread	-- This feature update the sound context in another thread.
-							-- With this functionnality, the application is more performant
-							-- on multi-core computer. It is also more easy to program the other
-							-- aspect of the application because you dont have to think about using
-							-- the audio_library.update reguraly. If you use precompile library,
-							-- these library must be precompile with multi-thread enable.
+			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
 
 			run_game

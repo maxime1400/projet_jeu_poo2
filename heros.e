@@ -41,7 +41,7 @@ feature {NONE} -- Constructeur
 					create right_surface.make_from_image (l_image)
 					create {GAME_SURFACE_ROTATE_ZOOM} left_surface.make_zoom_x_y (right_surface, -1, 1, True)
 					create up_surface.make_from_image (l_image)
-					create down_surface.make_from_image (l_image)
+					create {GAME_SURFACE_ROTATE_ZOOM} down_surface.make_zoom_x_y (right_surface, -1, 1, True)
 					sub_image_width := right_surface.width // 3
 					sub_image_height := right_surface.height
 				else
@@ -66,8 +66,6 @@ feature {NONE} -- Constructeur
 
 	initialize_sound
 			-- Création de `sound_source'
-		local
---			l_sound:AUDIO_SOUND_FILE
 		do
 			create l_sound.make ("./sons/marche.ogg")
 			if l_sound.is_openable then
