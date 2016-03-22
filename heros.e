@@ -322,4 +322,8 @@ feature {NONE} -- variables
 
 	compteur_pas:NATURAL_32
 
+invariant
+	l_sound_not_null: l_sound /= Void
+	compteur_pas_max: compteur_pas <= 11
+
 end
