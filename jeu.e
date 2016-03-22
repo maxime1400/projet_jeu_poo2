@@ -93,9 +93,12 @@ feature {NONE} -- Implémentation
 				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
 			end
 
+			if a_heros.get_determinant_creature > 3 then
+				a_heros.set_determinant_creature(1)
+			end
 			if a_heros.get_compteur_pas > 10 then
-				a_heros.set_compteur_pas (0)
-				create l_combat.make_window(l_window, l_area_dirty)
+				a_heros.set_compteur_pas(0)
+				create l_combat.make(l_window, a_heros.get_determinant_creature)
 			end
 
 			a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne

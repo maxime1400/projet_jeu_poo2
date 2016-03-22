@@ -1,23 +1,26 @@
 note
-	description: "Class pour la créature CHARIZARD"
-	auteur		: "Steve Duquet et Maxime Laflamme"
-	date        : "15 mars 2016"
+	description		: "L'image de la créature Charizard"
+	original		: "desert.e"
+	auteur			: "Louis Marchand"
+	date			: "1er avril 2015"
+	source			: "https://github.com/tioui/Eiffel_Game2.git"
+	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	CHARIZARD
+	IMG_CHARIZARD
 
 inherit
-	CREATURE
-	VOLANT
-	FEU
-	DRAGON
+	GAME_SURFACE
+		redefine
+			default_create
+		end
 
 create
-	create_image
+	default_create
 
 feature {NONE} -- Constructeur
 
-	create_image
+	default_create
 		local
 			l_image: IMG_IMAGE_FILE
 		do
