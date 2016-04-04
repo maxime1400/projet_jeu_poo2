@@ -1,4 +1,4 @@
-note
+animation_coordinatesnote
 	description		: "Personnage principal du programme"
 	original		: "maryo.e"
 	auteur			: "Louis Marchand"
@@ -342,7 +342,11 @@ feature {NONE} -- variables & constantes
 
 
 invariant
+
 	l_sound_not_null: l_sound /= Void
+
 	compteur_pas_max: compteur_pas <= 11
+
+	animation_coordinates_not_null: animation_coordinates /= Void
 
 end
