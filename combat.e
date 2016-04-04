@@ -75,12 +75,13 @@ feature {NONE} -- Constructeur
 				l_area_dirty.extend ([0, 0, 500, 500])
 				l_window.update_rectangles (l_area_dirty)
 
+				l_window.key_pressed_actions.extend (agent key_pressed(?, ?, l_heros))
 				from
-					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
 				until
-					touche=1
+					touche=0
+
 				loop
-					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
+					l_window.key_pressed_actions.extend (agent key_pressed(?, ?, l_heros))
 				end
 
 			else
@@ -88,9 +89,10 @@ feature {NONE} -- Constructeur
 			end
 		end
 
-	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
+	key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
 			-- Action quand une touche du clavier a été poussée
 		do
+			print("test")
 			if not a_key_state.is_repeat then
 				if a_key_state.is_return then
 					touche:=1
@@ -100,9 +102,9 @@ feature {NONE} -- Constructeur
 			end
 		end
 
-	feature {NONE} -- variables & constantes
+feature {NONE} -- variables & constantes
 
-	touche:INTEGER = 0
+	touche:INTEGER
 			-- le numéro de touche appuyé
 
 end
