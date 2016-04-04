@@ -122,6 +122,7 @@ feature -- Accès
 						x := x + (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
 							compteur_pas:= compteur_pas + 1
+							determinant_creature:= determinant_creature + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -130,6 +131,7 @@ feature -- Accès
 						x := x - (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
 							compteur_pas:= compteur_pas + 1
+							determinant_creature:= determinant_creature + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -138,6 +140,7 @@ feature -- Accès
 						y := y - (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
 							compteur_pas:= compteur_pas + 1
+							determinant_creature:= determinant_creature + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -146,6 +149,7 @@ feature -- Accès
 						y := y + (l_delta_time // movement_delta * 2).to_integer_32
 						if not sound_source.is_playing then
 							compteur_pas:= compteur_pas + 1
+							determinant_creature:= determinant_creature + 1
 							sound_source.queue_sound (l_sound)
 							sound_source.play
 						end
@@ -292,6 +296,18 @@ feature -- Accès
 			compteur_pas:= a_nombre
 		end
 
+	get_determinant_creature:NATURAL_32
+			-- retourne le nombre de pas
+		do
+			result:= determinant_creature
+		end
+
+	set_determinant_creature(a_nombre:NATURAL_32)
+			-- modifie le nombre de pas
+		do
+			determinant_creature:= a_nombre
+		end
+
 feature {NONE} -- implémentation
 
 	l_sound:AUDIO_SOUND_FILE
@@ -304,7 +320,7 @@ feature {NONE} -- implémentation
 	old_timestamp:NATURAL_32
 			-- Quand est arrivé le dernier mouvement (en considérant le mouvement `delta')
 
-feature {NONE} -- variables
+feature {NONE} -- variables & constantes
 
 	movement_delta:NATURAL_32 = 10
 			-- Le temps delta entre chaque mouvement de `actuel'
@@ -321,6 +337,9 @@ feature {NONE} -- variables
 	down_surface:GAME_SURFACE
 
 	compteur_pas:NATURAL_32
+
+	determinant_creature:NATURAL_32
+
 
 invariant
 	l_sound_not_null: l_sound /= Void
