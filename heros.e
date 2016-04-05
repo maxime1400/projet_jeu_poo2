@@ -282,6 +282,8 @@ feature -- Accès
 			-- `Current' a été gérée donc `is_dirty' est mis à faux
 		do
 			is_dirty := False
+		ensure
+			unset_dirty: is_dirty = False
 		end
 
 	get_compteur_pas:NATURAL_32
