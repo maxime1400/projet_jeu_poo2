@@ -1,4 +1,4 @@
-animation_coordinatesnote
+note
 	description		: "Personnage principal du programme"
 	original		: "maryo.e"
 	auteur			: "Louis Marchand"
