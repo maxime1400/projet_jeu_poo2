@@ -292,8 +292,12 @@ feature -- Accès
 
 	set_compteur_pas(a_nombre:NATURAL_32)
 			-- modifie le nombre de pas
+		require
+			nombre_correct: a_nombre <= 11
 		do
 			compteur_pas:= a_nombre
+		ensure
+			compteur_correct: compteur_pas <= 11
 		end
 
 	get_determinant_creature:NATURAL_32
@@ -304,8 +308,12 @@ feature -- Accès
 
 	set_determinant_creature(a_nombre:NATURAL_32)
 			-- modifie le nombre de pas
+		require
+			nombre_correct: a_nombre <= 3
 		do
 			determinant_creature:= a_nombre
+		ensure
+			determinant_correct: determinant_creature <= 3
 		end
 
 feature {NONE} -- implémentation
