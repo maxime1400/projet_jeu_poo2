@@ -6,6 +6,12 @@ note
 class
 	COMBAT
 
+inherit
+	GAME_LIBRARY_SHARED
+	IMG_LIBRARY_SHARED
+	AUDIO_LIBRARY_SHARED
+	EXCEPTIONS
+
 create
 	make
 
@@ -30,13 +36,14 @@ feature {NONE} -- Constructeur
 		-- Mise en place des images de la fenêtre de combat
 		local
 			l_fond:FOND_COMBAT
-			l_heros:IMG_HEROS
+			l_img_heros:IMG_HEROS
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
---			l_key:INTEGER_32
+			l_heros:HEROS
 		do
 			create l_fond
+			create l_img_heros
 			create l_heros
-			if not l_fond.has_error and not l_heros.has_error then
+			if not l_fond.has_error and not l_img_heros.has_error then
 				l_window.surface.draw_rectangle (
 										create {GAME_COLOR}.make_rgb (0, 128, 255),
 										0, 0,
@@ -58,7 +65,7 @@ feature {NONE} -- Constructeur
 								)
 
 				l_window.surface.draw_sub_surface (
-									l_heros,
+									l_img_heros,
 									0, 0,
 									500, 250,
 									0, 80
@@ -68,31 +75,35 @@ feature {NONE} -- Constructeur
 				l_area_dirty.extend ([0, 0, 500, 500])
 				l_window.update_rectangles (l_area_dirty)
 
---				from
---					l_key:= l_window.key_pressed_actions.extend (agent on_key_pressed(?))
---				until
---					l_key=0
---				loop
---					l_key:= l_window.key_pressed_actions.extend (agent on_key_pressed(a_key_state()))
---				end
+
+				from
+				until
+					touche=0
+
+				loop
+					l_window.key_pressed_actions.extend (agent key_pressed(?, ?, l_heros))
+				end
 
 			else
 				print("Impossible de créer la surface de fond du combat.")
 			end
 		end
 
---	on_key_pressed(a_key_state: GAME_KEY_STATE):INTEGER
---			-- Action quand une touche du clavier a été poussée
---		local
---			l_key:INTEGER
+	key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
+			-- Action quand une touche du clavier a été poussée
+		do
+			if not a_key_state.is_repeat then
+				if a_key_state.is_return then
+					touche:=1
+				else
+					touche:=0
+				end
+			end
+		end
 
---		do
---			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
---				if a_key_state.is_right then
---					l_key:=0
---				end
---			end
---			Result:=l_key
---		end
+feature {NONE} -- variables & constantes
+
+	touche:INTEGER
+			-- le numéro de touche appuyé
 
 end
