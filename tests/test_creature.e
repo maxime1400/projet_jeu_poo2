@@ -62,6 +62,21 @@ feature -- Test routines
 			assert ("CREATURE test normal", vie ~ 100)
 		end
 
+	test_attaque_recu
+			-- Test pour voir si une attaque est bien gérée.
+		local
+			new_creature: CREATURE
+			vie: INTEGER
+			attaque: ARRAY[INTEGER]
+		do
+			create new_creature.create_creature(100)
+			create attaque.make_empty
+			attaque.put(1, 80)
+			new_creature.attaque_recu(attaque)
+			vie:= new_creature.get_vie
+			assert ("CREATURE test normal", vie ~ 20)
+		end
+
 end
 
 

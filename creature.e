@@ -32,6 +32,16 @@ feature -- accès
 			if vie < 0 then
 				vie:= 0
 			end
+		ensure
+			vie_minimum: vie >= 0
+		end
+
+	attaque_recu(a_attaque:ARRAY[INTEGER])
+		--	Gère une attaque faite à la créature. La liste doit avoir deux cases, une pour le type, une pour les dégats.
+		require
+			longeur_array: a_attaque.count >= 2
+		do
+			set_vie(a_attaque[1])
 		end
 
 feature -- variables
