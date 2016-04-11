@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-15-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-15-0 http://www.eiffel.com/developers/xml/configuration-1-15-0.xsd" name="projet_jeu_poo2" uuid="1AF8A321-091E-4C51-8306-1D15B455DC0E">
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-14-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-14-0 http://www.eiffel.com/developers/xml/configuration-1-14-0.xsd" name="projet_jeu_poo2" uuid="1AF8A321-091E-4C51-8306-1D15B455DC0E">
 	<target name="projet_jeu_poo2">
 		<root class="APPLICATION" feature="make"/>
-		<option warning="true" is_obsolete_routine_type="true">
+		<option warning="true">
 			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
@@ -14,14 +14,19 @@
 		<library name="eiffel_game" location="$EIFFEL_LIBRARY\contrib\library\game2\game_core\game_core-safe.ecf"/>
 		<library name="game_effects" location="$EIFFEL_LIBRARY\contrib\library\game2\game_effects\game_effects-safe.ecf"/>
 		<library name="game_image_file" location="$EIFFEL_LIBRARY\contrib\library\game2\game_image_file\game_image_file-safe.ecf"/>
+		<library name="testing" location="$ISE_LIBRARY\library\testing\testing-safe.ecf"/>
 		<library name="thread" location="$ISE_LIBRARY\library\thread\thread.ecf"/>
 		<cluster name="projet_jeu_poo2" location=".\" recursive="true">
 			<file_rule>
-				<exclude>/EIFGENs$</exclude>
 				<exclude>/.git$</exclude>
+				<exclude>/EIFGENs$</exclude>
 				<exclude>/images$</exclude>
 				<exclude>/sons$</exclude>
 			</file_rule>
+			<file_rule>
+				<exclude>^tests$</exclude>
+			</file_rule>
+			<tests name="tests" location="C:\Users\Steve\OneDrive\Cegep\Session_4_Hiver_2016\PROGRAMMATION ORIENT&#201;E PAR OBJET II\projet_jeu_poo2\tests\"/>
 		</cluster>
 	</target>
 </system>

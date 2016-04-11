@@ -13,27 +13,8 @@ inherit
 	DRAGON
 
 create
-	create_image
+	create_creature
 
 feature {NONE} -- Constructeur
-
-	create_image
-		local
-			l_image: IMG_IMAGE_FILE
-		do
-			create l_image.make("./images/charizard.png")
-			if l_image.is_openable then
-				l_image.open
-				if l_image.is_open then
-					make_from_image (l_image)
-				else
-					has_error := True
-					make(1,1)
-				end
-			else
-				has_error := True
-				make(1,1)
-			end
-		end
 
 end
