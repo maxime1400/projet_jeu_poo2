@@ -1,10 +1,7 @@
 note
-	description: "[
-		Eiffel tests that can be executed by testing tool.
-	]"
-	author: "EiffelStudio test wizard"
-	date: "$Date$"
-	revision: "$Revision$"
+	description: "Tests unitaires de la classe CREATURES"
+	author: "Steve Duquet"
+	date: "11 avril 2016"
 	testing: "type/manual"
 
 class
@@ -23,7 +20,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test normal", vie ~ 100)
+			assert ("CREATURE test retour valeur initiale", vie ~ 100)
 		end
 
 	test_vie_diminuer
@@ -35,7 +32,7 @@ feature -- Test routines
 			create new_creature.create_creature(100)
 			new_creature.set_vie(20)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test normal", vie ~ 80)
+			assert ("CREATURE test diminution normale", vie ~ 80)
 		end
 
 	test_vie_limite
@@ -47,7 +44,7 @@ feature -- Test routines
 			create new_creature.create_creature(100)
 			new_creature.set_vie(110)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test normal", vie ~ 0)
+			assert ("CREATURE test diminution à zéro", vie ~ 0)
 		end
 
 	test_vie_pareil
@@ -59,7 +56,7 @@ feature -- Test routines
 			create new_creature.create_creature(100)
 			new_creature.set_vie(0)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test normal", vie ~ 100)
+			assert ("CREATURE test aucune diminution", vie ~ 100)
 		end
 
 	test_attaque_recu
@@ -74,9 +71,6 @@ feature -- Test routines
 			attaque.put(1, 80)
 			new_creature.attaque_recu(attaque)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test normal", vie ~ 20)
+			assert ("CREATURE test attaque_recu", vie ~ 20)
 		end
-
 end
-
-
