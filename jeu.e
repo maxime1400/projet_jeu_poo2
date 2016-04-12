@@ -111,6 +111,7 @@ feature {NONE} -- Implémentation
 				if a_heros.get_compteur_pas > 10 then
 					a_heros.set_compteur_pas(0)
 					bit_combat:= 2
+--					choix_img_creature(a_heros.get_determinant_creature)
 				end
 
 				a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -218,10 +219,26 @@ feature {NONE} -- Implémentation
 			game_library.stop  -- Arrête la boucle de commande (game_library.launch pour revenir)
 		end
 
+--	choix_img_creature(a_determinant: INTEGER)
+--		-- Retourne l'image de la créature
+--		local
+--			l_img_1: IMG_CHARIZARD
+--		do
+--			if a_determinant = 1 then
+--				create l_img_1
+--				img_creature:= l_img_1
+--			end
+--		end
+
+feature
+
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
 
 	bit_combat:INTEGER
 			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
+
+--	img_creature:GAME_SURFACE
+--			-- image de la créature à utiliser pendant un combat
 
 end
