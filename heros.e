@@ -73,7 +73,6 @@ feature {NONE} -- Constructeur
 				if l_sound.is_open then
 					audio_library.sources_add
 					sound_source:=audio_library.last_source_added
-
 				else
 					print("Impossible d'ouvrir le fichier audio.")
 					die(1)
@@ -189,7 +188,7 @@ feature -- Accès
 		end
 
 	stop_left
-			-- `Current' arrête de se déplacer vers la gauce
+			-- `Current' arrête de se déplacer vers la gauche
 		do
 			going_left := False
 			if not going_right then

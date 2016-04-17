@@ -37,7 +37,7 @@ feature -- accès
 		end
 
 	attaque_recu(a_attaque:ARRAY[INTEGER])
-		--	Gère une attaque faite à la créature. La liste doit avoir deux cases, une pour le type, une pour les dégats.
+		--	Gère une attaque faite à la créature. La liste doit avoir deux cases, la 1ème pour le type, la 2e pour les dégats.
 		require
 			longeur_array: a_attaque.count = 2
 		do
