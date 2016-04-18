@@ -26,7 +26,7 @@ feature {NONE} -- Constructeur
 			audio_library.enable_sound
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
-			determinant_combat:= 1
+			indicateur_combat:= 1
 			run_game
 			image_file_library.quit_library
 			audio_library.quit_library
@@ -86,17 +86,18 @@ feature {NONE} -- Implémentation
 			l_must_redraw:BOOLEAN
 		do
 			l_must_redraw := a_must_redraw
-			if (game_library.time_since_create - last_redraw_time) > 1000 then	-- Chaque seconde, redessine la totalité de l'écran
+			if (game_library.time_since_create - last_redraw_time) > 250 then	-- Chaque seconde, redessine la totalité de l'écran
 				l_must_redraw := True
 				last_redraw_time := game_library.time_since_create
 			end
 			create l_area_dirty.make(2)
-			if determinant_combat = 3 then
-				determinant_combat:= 1
+			if indicateur_combat = 3 then
+				indicateur_combat:= 1
 				l_must_redraw:= true
 			end
 
-			if determinant_combat = 1 then
+			if indicateur_combat = 1 then
+
 				if l_must_redraw then
 					-- Force la redéfinition de l'ensemble de la fenêtre
 					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
@@ -110,7 +111,7 @@ feature {NONE} -- Implémentation
 				end
 				if a_heros.get_compteur_pas > 10 then
 					a_heros.set_compteur_pas(0)
-					determinant_combat:= 2
+					indicateur_combat:= 2
 				end
 
 				a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -148,7 +149,8 @@ feature {NONE} -- Implémentation
 					l_window.update_rectangles (l_area_dirty)
 				end
 
-			elseif determinant_combat = 2 then
+			elseif indicateur_combat = 2 then
+
 				if l_must_redraw then
 					-- Force la redéfinition de l'ensemble de la fenêtre
 					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
@@ -166,6 +168,10 @@ feature {NONE} -- Implémentation
 									0, 0
 								)
 
+				apparition_creature (l_window, a_heros)
+
+				apparition_attaque (l_window)
+
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
 									0, 0,
@@ -182,16 +188,29 @@ feature {NONE} -- Implémentation
 			-- Action quand une touche du clavier a été poussée
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
-				if a_key_state.is_right then
-					a_heros.go_right(a_timestamp)
-				elseif a_key_state.is_left then
-					a_heros.go_left(a_timestamp)
-				elseif a_key_state.is_up then
-					a_heros.go_up(a_timestamp)
-				elseif a_key_state.is_down then
-					a_heros.go_down(a_timestamp)
-				elseif a_key_state.is_return then
-					determinant_combat:= 3
+
+				if indicateur_combat = 1 then
+					if a_key_state.is_right then
+						a_heros.go_right(a_timestamp)
+					elseif a_key_state.is_left then
+						a_heros.go_left(a_timestamp)
+					elseif a_key_state.is_up then
+						a_heros.go_up(a_timestamp)
+					elseif a_key_state.is_down then
+						a_heros.go_down(a_timestamp)
+					end
+				elseif indicateur_combat = 2 then
+					if a_key_state.is_return then
+						indicateur_combat:= 3
+					elseif a_key_state.is_A then
+						choix_attaque:= 1
+					elseif a_key_state.is_S then
+						choix_attaque:= 2
+					elseif a_key_state.is_Z then
+						choix_attaque:= 3
+					elseif a_key_state.is_X then
+						choix_attaque:= 4
+					end
 				end
 			end
 		end
@@ -218,10 +237,63 @@ feature {NONE} -- Implémentation
 			game_library.stop  -- Arrête la boucle de commande (game_library.launch pour revenir)
 		end
 
+	apparition_creature (a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+		local
+			l_aerodactyl: IMG_AERODACTYL
+			l_charizard: IMG_CHARIZARD
+			l_gyarados: IMG_GYARADOS
+			l_creature: GAME_SURFACE
+		do
+			if a_heros.get_determinant_creature = 1 then
+				create l_charizard
+				l_creature := l_charizard
+			elseif a_heros.get_determinant_creature = 2 then
+				create l_aerodactyl
+				l_creature := l_aerodactyl
+			else
+				create l_gyarados
+				l_creature := l_gyarados
+			end
+			a_window.surface.draw_sub_surface (l_creature, 0, 0, 250, 250, 250, 0)
+		end
+
+	apparition_attaque (a_window: GAME_WINDOW_SURFACED)
+		local
+			l_feu: 		IMG_ATTACK_FIRE
+			l_ice: 		IMG_ATTACK_ICE
+			l_sword: 	IMG_ATTACK_SWORD
+			l_rock:		IMG_ATTACK_ROCK
+			l_vide: 	IMG_VIDE
+			l_attack: 	GAME_SURFACE
+		do
+			if choix_attaque = 1 then
+				create l_feu
+				l_attack := l_feu
+			elseif choix_attaque = 2 then
+				create l_ice
+				l_attack := l_ice
+			elseif choix_attaque = 3 then
+				create l_sword
+				l_attack := l_sword
+			elseif choix_attaque = 4 then
+				create l_rock
+				l_attack := l_rock
+			else
+				create l_vide
+				l_attack := l_vide
+			end
+			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
+			choix_attaque:= 0
+		end
+
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
 
-	determinant_combat:INTEGER
+	indicateur_combat:INTEGER
+
 			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
+
+	choix_attaque:INTEGER
+			-- Nombre de l'attaque choisi par le joueur
 
 end
