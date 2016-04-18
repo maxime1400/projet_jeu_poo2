@@ -26,7 +26,7 @@ feature {NONE} -- Constructeur
 			audio_library.enable_sound
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
-			bit_combat:= 1
+			determinant_combat:= 1
 			run_game
 			image_file_library.quit_library
 			audio_library.quit_library
@@ -91,12 +91,12 @@ feature {NONE} -- Implémentation
 				last_redraw_time := game_library.time_since_create
 			end
 			create l_area_dirty.make(2)
-			if bit_combat = 3 then
-				bit_combat:= 1
+			if determinant_combat = 3 then
+				determinant_combat:= 1
 				l_must_redraw:= true
 			end
 
-			if bit_combat = 1 then
+			if determinant_combat = 1 then
 				if l_must_redraw then
 					-- Force la redéfinition de l'ensemble de la fenêtre
 					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
@@ -110,7 +110,7 @@ feature {NONE} -- Implémentation
 				end
 				if a_heros.get_compteur_pas > 10 then
 					a_heros.set_compteur_pas(0)
-					bit_combat:= 2
+					determinant_combat:= 2
 				end
 
 				a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -148,7 +148,7 @@ feature {NONE} -- Implémentation
 					l_window.update_rectangles (l_area_dirty)
 				end
 
-			elseif bit_combat = 2 then
+			elseif determinant_combat = 2 then
 				if l_must_redraw then
 					-- Force la redéfinition de l'ensemble de la fenêtre
 					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
@@ -191,7 +191,7 @@ feature {NONE} -- Implémentation
 				elseif a_key_state.is_down then
 					a_heros.go_down(a_timestamp)
 				elseif a_key_state.is_return then
-					bit_combat:= 3
+					determinant_combat:= 3
 				end
 			end
 		end
@@ -221,7 +221,7 @@ feature {NONE} -- Implémentation
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
 
-	bit_combat:INTEGER
+	determinant_combat:INTEGER
 			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
 
 end
