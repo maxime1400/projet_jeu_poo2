@@ -20,6 +20,8 @@ feature {NONE} -- Initialization
 			run_player(a_filename)
 		end
 
+feature {NONE} -- Access
+
 	run_player(a_filename:READABLE_STRING_GENERAL)
 		-- Execute le son
 		local
