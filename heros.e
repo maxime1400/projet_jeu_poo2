@@ -339,16 +339,22 @@ feature {NONE} -- variables & constantes
 			-- Le temps delta entre chaque animation de `actuel'
 
 	left_surface:GAME_SURFACE
+			-- La surface lorsque `actuel' va vers la gauche
 
 	right_surface:GAME_SURFACE
+			-- La surface lorsque `actuel' va vers la droite
 
 	up_surface:GAME_SURFACE
+			-- La surface lorsque `actuel' va vers le haut
 
 	down_surface:GAME_SURFACE
+			-- La surface lorsque `actuel' va vers le bas
 
 	compteur_pas:NATURAL_32
+			-- Le nombre de pas de `actuel'
 
 	determinant_creature:NATURAL_32
+			-- La créature qui apparaîtra lors du combat
 
 
 invariant
