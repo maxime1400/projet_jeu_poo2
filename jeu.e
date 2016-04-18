@@ -200,7 +200,13 @@ feature {NONE} -- Implémentation
 					if a_key_state.is_return then
 						indicateur_combat:= 3
 					elseif a_key_state.is_A then
-						choix_attaque:=1
+						choix_attaque:= 1
+					elseif a_key_state.is_S then
+						choix_attaque:= 2
+					elseif a_key_state.is_Z then
+						choix_attaque:= 3
+					elseif a_key_state.is_X then
+						choix_attaque:= 4
 					end
 				end
 			end
@@ -250,13 +256,25 @@ feature {NONE} -- Implémentation
 
 	apparition_attaque (a_window: GAME_WINDOW_SURFACED)
 		local
-			l_feu: IMG_ATTACK_FIRE
-			l_vide: IMG_VIDE
-			l_attack: GAME_SURFACE
+			l_feu: 		IMG_ATTACK_FIRE
+			l_ice: 		IMG_ATTACK_ICE
+			l_sword: 	IMG_ATTACK_SWORD
+			l_rock:		IMG_ATTACK_ROCK
+			l_vide: 	IMG_VIDE
+			l_attack: 	GAME_SURFACE
 		do
 			if choix_attaque = 1 then
 				create l_feu
 				l_attack := l_feu
+			elseif choix_attaque = 2 then
+				create l_ice
+				l_attack := l_ice
+			elseif choix_attaque = 3 then
+				create l_sword
+				l_attack := l_sword
+			elseif choix_attaque = 4 then
+				create l_rock
+				l_attack := l_rock
 			else
 				create l_vide
 				l_attack := l_vide
