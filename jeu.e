@@ -11,31 +11,46 @@ class
 
 inherit
 	GAME_LIBRARY_SHARED
+	IMG_LIBRARY_SHARED
+	AUDIO_LIBRARY_SHARED
+	EXCEPTIONS
 
 create
-	run_game
+	make_game
 
 feature {NONE} -- Constructeur
+
+	make_game
+		do
+			game_library.enable_video
+			audio_library.enable_sound
+			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
+			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
+			indicateur_combat:= 1
+			run_game
+			image_file_library.quit_library
+			audio_library.quit_library
+			game_library.quit_library
+		end
 
 	run_game
 			-- Création des ressources et lancement du jeu
 		local
 			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
-			l_window:GAME_WINDOW_SURFACED
 			l_fond:FOND_JEU
 			l_heros:HEROS
+			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
 			l_fond_combat:FOND_COMBAT
 			l_img_heros:IMG_HEROS
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
-			create l_heros
 			create l_fond_combat
 			create l_img_heros
-			indicateur_combat:= 1
+			create l_heros
 
-			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error ) then
+			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
 				create l_heros
 				l_heros.y := 250
 				l_heros.x := 250
@@ -47,8 +62,7 @@ feature {NONE} -- Constructeur
 					game_library.quit_signal_actions.extend (agent on_quit)
 					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
 					l_window.key_released_actions.extend (agent on_key_released(?,?,  l_heros))
-					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond, l_window, False,
-															l_fond_combat, l_img_heros))
+					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond, l_window, False, l_fond_combat, l_img_heros))
 					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros)
 					last_redraw_time := game_library.time_since_create
 					game_library.launch
@@ -56,9 +70,11 @@ feature {NONE} -- Constructeur
 					print("Impossible de créer le personnage.")
 				end
 			else
-				print("Problème de création d'images")
+				print("Problème d'ouverture d'image")
 			end
+
 		end
+
 
 feature {NONE} -- Implémentation
 
@@ -70,13 +86,11 @@ feature {NONE} -- Implémentation
 			l_must_redraw:BOOLEAN
 		do
 			l_must_redraw := a_must_redraw
-			if (game_library.time_since_create - last_redraw_time) > 1000 then
-			-- Chaque seconde, redessine la totalité de l'écran
+			if (game_library.time_since_create - last_redraw_time) > 250 then	-- Chaque seconde, redessine la totalité de l'écran
 				l_must_redraw := True
 				last_redraw_time := game_library.time_since_create
 			end
 			create l_area_dirty.make(2)
-
 			if indicateur_combat = 3 then
 				indicateur_combat:= 1
 				l_must_redraw:= true
@@ -97,7 +111,6 @@ feature {NONE} -- Implémentation
 				if a_heros.get_compteur_pas > 10 then
 					a_heros.set_compteur_pas(0)
 					indicateur_combat:= 2
---					choix_img_creature(a_heros.get_determinant_creature)
 				end
 
 				a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -153,6 +166,10 @@ feature {NONE} -- Implémentation
 									0, 0
 								)
 
+				apparition_creature (l_window, a_heros)
+
+				apparition_attaque (l_window)
+
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
 									0, 0,
@@ -169,17 +186,22 @@ feature {NONE} -- Implémentation
 			-- Action quand une touche du clavier a été poussée
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
-				if a_key_state.is_right then
-					a_heros.go_right(a_timestamp)
-				elseif a_key_state.is_left then
-					a_heros.go_left(a_timestamp)
-				elseif a_key_state.is_up then
-					a_heros.go_up(a_timestamp)
-				elseif a_key_state.is_down then
-					a_heros.go_down(a_timestamp)
-
-				elseif a_key_state.is_return then
-					indicateur_combat:= 3
+				if indicateur_combat = 1 then
+					if a_key_state.is_right then
+						a_heros.go_right(a_timestamp)
+					elseif a_key_state.is_left then
+						a_heros.go_left(a_timestamp)
+					elseif a_key_state.is_up then
+						a_heros.go_up(a_timestamp)
+					elseif a_key_state.is_down then
+						a_heros.go_down(a_timestamp)
+					end
+				elseif indicateur_combat = 2 then
+					if a_key_state.is_return then
+						indicateur_combat:= 3
+					elseif a_key_state.is_A then
+						choix_attaque:=1
+					end
 				end
 			end
 		end
@@ -206,26 +228,50 @@ feature {NONE} -- Implémentation
 			game_library.stop  -- Arrête la boucle de commande (game_library.launch pour revenir)
 		end
 
---	choix_img_creature(a_determinant: INTEGER)
---		-- Retourne l'image de la créature
---		local
---			l_img_1: IMG_CHARIZARD
---		do
---			if a_determinant = 1 then
---				create l_img_1
---				img_creature:= l_img_1
---			end
---		end
+	apparition_creature (a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+		local
+			l_aerodactyl: IMG_AERODACTYL
+			l_charizard: IMG_CHARIZARD
+			l_gyarados: IMG_GYARADOS
+			l_creature: GAME_SURFACE
+		do
+			if a_heros.get_determinant_creature = 1 then
+				create l_charizard
+				l_creature := l_charizard
+			elseif a_heros.get_determinant_creature = 2 then
+				create l_aerodactyl
+				l_creature := l_aerodactyl
+			else
+				create l_gyarados
+				l_creature := l_gyarados
+			end
+			a_window.surface.draw_sub_surface (l_creature, 0, 0, 250, 250, 250, 0)
+		end
 
-feature
+	apparition_attaque (a_window: GAME_WINDOW_SURFACED)
+		local
+			l_feu: IMG_ATTACK_FIRE
+			l_vide: IMG_VIDE
+			l_attack: GAME_SURFACE
+		do
+			if choix_attaque = 1 then
+				create l_feu
+				l_attack := l_feu
+			else
+				create l_vide
+				l_attack := l_vide
+			end
+			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
+			choix_attaque:= 0
+		end
 
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
 
 	indicateur_combat:INTEGER
-			-- 1 = pas en combat, 2 = combat en cours, 3 = vient de sortir du combat
+			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
 
---	img_creature:GAME_SURFACE
---			-- image de la créature à utiliser pendant un combat
+	choix_attaque:INTEGER
+			-- Nombre de l'attaque choisi par le joueur
 
 end
