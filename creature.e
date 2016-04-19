@@ -25,7 +25,7 @@ feature -- accès
 			result:= vie
 		end
 
-	set_vie(a_degats:INTEGER)
+	soustrait_vie(a_degats:INTEGER)
 		-- soustrait la vie par l'argument envoyé
 		do
 			vie:= vie - a_degats
@@ -36,12 +36,10 @@ feature -- accès
 			vie_minimum: vie >= 0
 		end
 
-	attaque_recu(a_attaque:ARRAY[INTEGER])
+	attaque_recu(a_type:INTEGER; a_degats:INTEGER)
 		--	Gère une attaque faite à la créature. La liste doit avoir deux cases, une pour le type, une pour les dégats.
-		require
-			longeur_array: a_attaque.count = 2
 		do
-			set_vie(a_attaque[1])
+			soustrait_vie(a_degats)
 		end
 
 feature -- variables

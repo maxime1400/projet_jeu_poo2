@@ -1,5 +1,5 @@
 note
-	description: "Tests unitaires de la classe CREATURES"
+	description: "Tests unitaires de la classe CREATURE"
 	author: "Steve Duquet"
 	date: "11 avril 2016"
 	testing: "type/manual"
@@ -30,7 +30,7 @@ feature -- Test routines
 			vie: INTEGER
 		do
 			create new_creature.create_creature(100)
-			new_creature.set_vie(20)
+			new_creature.soustrait_vie(20)
 			vie:= new_creature.get_vie
 			assert ("CREATURE test diminution normale", vie ~ 80)
 		end
@@ -42,7 +42,7 @@ feature -- Test routines
 			vie: INTEGER
 		do
 			create new_creature.create_creature(100)
-			new_creature.set_vie(110)
+			new_creature.soustrait_vie(110)
 			vie:= new_creature.get_vie
 			assert ("CREATURE test diminution à zéro", vie ~ 0)
 		end
@@ -54,9 +54,9 @@ feature -- Test routines
 			vie: INTEGER
 		do
 			create new_creature.create_creature(100)
-			new_creature.set_vie(0)
+			new_creature.soustrait_vie(0)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test aucune diminution", vie ~ 100)
+			assert ("CREATURE test diminution de zéro", vie ~ 100)
 		end
 
 	test_attaque_recu
@@ -64,12 +64,13 @@ feature -- Test routines
 		local
 			new_creature: CREATURE
 			vie: INTEGER
-			attaque: ARRAY[INTEGER]
+			type: INTEGER
+			degats: INTEGER
 		do
 			create new_creature.create_creature(100)
-			create attaque.make_empty
-			attaque.put(1, 80)
-			new_creature.attaque_recu(attaque)
+			type:= 1
+			degats:= 80
+			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
 			assert ("CREATURE test attaque_recu", vie ~ 20)
 		end
