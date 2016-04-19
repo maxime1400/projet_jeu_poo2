@@ -98,13 +98,7 @@ feature {NONE} -- Implémentation
 
 			if indicateur_combat = 1 then
 
-				if l_must_redraw then
-					-- Force la redéfinition de l'ensemble de la fenêtre
-					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
-				else
-					-- Redessine seulement l'endroit où était le personnage
-					l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
-				end
+				doit_redessiner (l_window, a_heros, l_must_redraw, l_area_dirty)
 
 				if a_heros.get_determinant_creature > 3 then
 					a_heros.set_determinant_creature(1)
@@ -139,15 +133,25 @@ feature {NONE} -- Implémentation
 			elseif indicateur_combat = 2 then
 
 				if l_must_redraw then
-					-- Force la redéfinition de l'ensemble de la fenêtre
-					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
-
-				dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
+					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
+					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
 				end
 			end
 			l_window.update_rectangles (l_area_dirty)
 		end
 
+
+	doit_redessiner(l_window:GAME_WINDOW_SURFACED; a_heros:HEROS; l_must_redraw:BOOLEAN; l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]])
+			--
+		do
+			if l_must_redraw then
+				-- Force la redéfinition de l'ensemble de la fenêtre
+				l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
+			elseif l_must_redraw = false AND indicateur_combat /= 2 then
+				-- Redessine seulement l'endroit où était le personnage
+				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
+			end
+		end
 
 
 	dessine_scene(l_window:GAME_WINDOW_SURFACED;
@@ -199,13 +203,6 @@ feature {NONE} -- Implémentation
 								)
 			end
 		end
-
-
-
-
-
-
-
 
 
 	on_key_pressed(a_timestamp: NATURAL_32; a_key_state: GAME_KEY_STATE; a_heros:HEROS)
@@ -309,6 +306,8 @@ feature {NONE} -- Implémentation
 			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
 			choix_attaque:= 0
 		end
+
+feature {NONE} -- Variables
 
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
