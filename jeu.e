@@ -98,13 +98,7 @@ feature {NONE} -- Implémentation
 
 			if indicateur_combat = 1 then
 
-				if l_must_redraw then
-					-- Force la redéfinition de l'ensemble de la fenêtre
-					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
-				else
-					-- Redessine seulement l'endroit où était le personnage
-					l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
-				end
+				doit_redessiner (l_window, a_heros, l_must_redraw, l_area_dirty)
 
 				if a_heros.get_determinant_creature > 3 then
 					a_heros.set_determinant_creature(1)
@@ -129,20 +123,7 @@ feature {NONE} -- Implémentation
 						a_heros.y := a_image.height - a_heros.sub_image_height
 					end
 
-					-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
-					l_window.surface.draw_rectangle (
-										create {GAME_COLOR}.make_rgb (0, 128, 255),
-										l_area_dirty.first.x, l_area_dirty.first.y,
-										l_area_dirty.first.width, l_area_dirty.first.height
-									)
-					l_window.surface.draw_sub_surface (
-										a_image,
-										l_area_dirty.first.x, l_area_dirty.first.y,
-										l_area_dirty.first.width, l_area_dirty.first.height,
-										l_area_dirty.first.x, l_area_dirty.first.y
-									)
-					l_window.surface.draw_sub_surface (a_heros.surface, a_heros.sub_image_x, a_heros.sub_image_y,
-											a_heros.sub_image_width, a_heros.sub_image_height, a_heros.x, a_heros.y)
+					dessine_scene(l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
 
 					-- Mise à jour de la modification dans l'écran
 					l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
@@ -152,8 +133,50 @@ feature {NONE} -- Implémentation
 			elseif indicateur_combat = 2 then
 
 				if l_must_redraw then
-					-- Force la redéfinition de l'ensemble de la fenêtre
-					l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
+					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
+					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
+				end
+			end
+			l_window.update_rectangles (l_area_dirty)
+		end
+
+
+	doit_redessiner(l_window:GAME_WINDOW_SURFACED; a_heros:HEROS; l_must_redraw:BOOLEAN; l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]])
+			--
+		do
+			if l_must_redraw then
+				-- Force la redéfinition de l'ensemble de la fenêtre
+				l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
+			elseif l_must_redraw = false AND indicateur_combat /= 2 then
+				-- Redessine seulement l'endroit où était le personnage
+				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
+			end
+		end
+
+
+	dessine_scene(l_window:GAME_WINDOW_SURFACED;
+					l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]];
+					a_image:GAME_SURFACE; a_heros:HEROS;
+					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
+			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
+		do
+			if indicateur_combat = 1 then
+
+				l_window.surface.draw_rectangle (
+									create {GAME_COLOR}.make_rgb (0, 128, 255),
+									l_area_dirty.first.x, l_area_dirty.first.y,
+									l_area_dirty.first.width, l_area_dirty.first.height
+								)
+				l_window.surface.draw_sub_surface (
+									a_image,
+									l_area_dirty.first.x, l_area_dirty.first.y,
+									l_area_dirty.first.width, l_area_dirty.first.height,
+									l_area_dirty.first.x, l_area_dirty.first.y
+								)
+				l_window.surface.draw_sub_surface (a_heros.surface, a_heros.sub_image_x, a_heros.sub_image_y,
+										a_heros.sub_image_width, a_heros.sub_image_height, a_heros.x, a_heros.y)
+
+			elseif indicateur_combat = 2 then
 
 				l_window.surface.draw_rectangle (
 										create {GAME_COLOR}.make_rgb (0, 128, 255),
@@ -178,9 +201,7 @@ feature {NONE} -- Implémentation
 									500, 250,
 									0, 80
 								)
-				end
 			end
-			l_window.update_rectangles (l_area_dirty)
 		end
 
 
@@ -285,6 +306,8 @@ feature {NONE} -- Implémentation
 			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
 			choix_attaque:= 0
 		end
+
+feature {NONE} -- Variables
 
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
