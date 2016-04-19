@@ -43,12 +43,14 @@ feature {NONE} -- Constructeur
 			l_musique:MUSIQUE
 			l_fond_combat:FOND_COMBAT
 			l_img_heros:IMG_HEROS
+			l_creature_opposer:ARRAY[CREATURE]
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
 			create l_fond_combat
 			create l_img_heros
 			create l_heros
+			create l_creature_opposer.make_empty
 
 			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
 				create l_heros
@@ -62,8 +64,9 @@ feature {NONE} -- Constructeur
 					game_library.quit_signal_actions.extend (agent on_quit)
 					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
 					l_window.key_released_actions.extend (agent on_key_released(?,?,  l_heros))
-					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond, l_window, False, l_fond_combat, l_img_heros))
-					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros)
+					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond, l_window, False,
+																				l_fond_combat, l_img_heros, l_creature_opposer))
+					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros, l_creature_opposer)
 					last_redraw_time := game_library.time_since_create
 					game_library.launch
 				else
@@ -79,7 +82,7 @@ feature {NONE} -- Constructeur
 feature {NONE} -- Implémentation
 
 	on_iteration(a_timestamp:NATURAL_32; a_heros:HEROS; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED;
-					a_must_redraw:BOOLEAN; a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
+					a_must_redraw:BOOLEAN; a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE; a_creature_opposer:ARRAY[CREATURE])
 			-- Événement qui est lancé à chaque itération
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
@@ -91,7 +94,7 @@ feature {NONE} -- Implémentation
 				last_redraw_time := game_library.time_since_create
 			end
 			create l_area_dirty.make(2)
-			if indicateur_combat = 3 then
+			if indicateur_combat = 4 then
 				indicateur_combat:= 1
 				l_must_redraw:= true
 			end
@@ -131,10 +134,18 @@ feature {NONE} -- Implémentation
 				end
 
 			elseif indicateur_combat = 2 then
+				a_creature_opposer[0]:= creation_creature(a_heros.get_determinant_creature)
+				indicateur_combat:= 3
+
+			elseif indicateur_combat = 3 then
 
 				if l_must_redraw then
 					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
 					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
+					degats_ennemi(a_creature_opposer[0])
+					if (a_creature_opposer[0].get_vie = 0) then
+						indicateur_combat:= 4
+					end
 				end
 			end
 			l_window.update_rectangles (l_area_dirty)
@@ -176,7 +187,7 @@ feature {NONE} -- Implémentation
 				l_window.surface.draw_sub_surface (a_heros.surface, a_heros.sub_image_x, a_heros.sub_image_y,
 										a_heros.sub_image_width, a_heros.sub_image_height, a_heros.x, a_heros.y)
 
-			elseif indicateur_combat = 2 then
+			elseif indicateur_combat = 3 then
 
 				l_window.surface.draw_rectangle (
 										create {GAME_COLOR}.make_rgb (0, 128, 255),
@@ -220,9 +231,9 @@ feature {NONE} -- Implémentation
 					elseif a_key_state.is_down then
 						a_heros.go_down(a_timestamp)
 					end
-				elseif indicateur_combat = 2 then
+				elseif indicateur_combat = 3 then
 					if a_key_state.is_return then
-						indicateur_combat:= 3
+						indicateur_combat:= 4
 					elseif a_key_state.is_A then
 						choix_attaque:= 1
 					elseif a_key_state.is_S then
@@ -307,6 +318,31 @@ feature {NONE} -- Implémentation
 			choix_attaque:= 0
 		end
 
+		creation_creature(numero_creature:NATURAL_32):CREATURE
+		local
+			l_charizard:CHARIZARD
+			l_gyarados:GYARADOS
+			l_aerodactyl:AERODACTYL
+			l_creature:CREATURE
+		do
+			if (numero_creature = 1) then
+				create l_charizard.create_creature (300)
+				l_creature:= l_charizard
+			elseif (numero_creature = 2) then
+				create l_charizard.create_creature (300)
+				l_creature:= l_charizard
+			else
+				create l_charizard.create_creature (300)
+				l_creature:= l_charizard
+			end
+			result:= l_creature
+		end
+
+	degats_ennemi(l_creature_opposer:CREATURE)
+	do
+		l_creature_opposer.attaque_recu (choix_attaque, 20)
+	end
+
 feature {NONE} -- Variables
 
 	last_redraw_time:NATURAL_32
@@ -314,7 +350,7 @@ feature {NONE} -- Variables
 
 	indicateur_combat:INTEGER
 
-			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
+			-- 1=pas en combat, 2= initialisation du combat, 3=combat en cours, 4=vient de sortir du combat
 
 	choix_attaque:INTEGER
 			-- Nombre de l'attaque choisi par le joueur
