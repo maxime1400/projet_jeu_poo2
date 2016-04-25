@@ -23,7 +23,6 @@ inherit
 		select
 			gerer_1, gerer_2
 		end
-	DRAGON
 
 create
 	create_creature

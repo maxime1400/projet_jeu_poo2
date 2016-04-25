@@ -23,21 +23,25 @@ feature
 		end
 
 	degat_2(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type glace reçu
 		require else
 			a_degats_not_zero: a_degats > 0
 		do
-			result:= a_degats // 3
+			result:= a_degats // 2
 		end
 
 	degat_3(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type épée reçu
+		require else
+			a_degats_not_zero: a_degats > 0
 		do
 			result:= a_degats
 		end
 
 	degat_4(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type pierre reçu
+		require else
+			a_degats_not_zero: a_degats > 0
 		do
 			result:= a_degats * 2
 		end
