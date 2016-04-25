@@ -26,6 +26,9 @@
 			<file_rule>
 				<exclude>^tests$</exclude>
 			</file_rule>
+			<file_rule>
+				<exclude>^tests$</exclude>
+			</file_rule>
 			<tests name="tests" location="C:\Users\Steve\OneDrive\Cegep\Session_4_Hiver_2016\PROGRAMMATION ORIENT&#201;E PAR OBJET II\projet_jeu_poo2\tests\"/>
 		</cluster>
 	</target>
