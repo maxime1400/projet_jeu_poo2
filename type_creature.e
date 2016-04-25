@@ -15,19 +15,19 @@ feature
 		end
 
 	degat_2(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type eau reçu
 		do
 			result:= a_degats
 		end
 
 	degat_3(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type volant reçu
 		do
 			result:= a_degats
 		end
 
 	degat_4(a_degats:INTEGER):INTEGER
-		--	Modifie les dégats de type feu reçu
+		--	Modifie les dégats de type roche reçu
 		do
 			result:= a_degats
 		end
