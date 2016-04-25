@@ -38,7 +38,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			type:= 2
-			degats:= 30
+			degats:= 20
 			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
 			assert ("CREATURE test attaque_recu", vie ~ 90)
