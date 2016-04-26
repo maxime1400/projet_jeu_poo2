@@ -328,7 +328,7 @@ feature {NONE} -- Implémentation
 			gyarados:GYARADOS
 		do
 			if a_determinant_creature = 1 then
-				create charizard.create_creature(200)
+				create charizard.create_creature(100)
 				result:= charizard
 			elseif a_determinant_creature = 2 then
 				create aerodactyl.create_creature(100)
@@ -342,7 +342,7 @@ feature {NONE} -- Implémentation
 	dommage_creature (a_creature: CREATURE)
 		-- envoi les dommages à l'objet de type CREATURE
 	do
-		a_creature.attaque_recu (choix_attaque, 20)
+		a_creature.attaque_recu (choix_attaque, 10)
 		choix_attaque:= 0
 	end
 

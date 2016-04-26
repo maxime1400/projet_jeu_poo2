@@ -19,7 +19,7 @@ feature
 		require else
 			a_degats_not_zero: a_degats > 0
 		do
-			result:= a_degats
+			result:= a_degats * 2
 		end
 
 	degat_2(a_degats:INTEGER):INTEGER

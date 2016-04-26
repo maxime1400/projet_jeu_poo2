@@ -27,7 +27,7 @@ feature
 		require else
 			a_degats_not_zero: a_degats > 0
 		do
-			result:= a_degats
+			result:= a_degats // 2
 		end
 
 	degat_3(a_degats:INTEGER):INTEGER
@@ -35,7 +35,7 @@ feature
 		require else
 			a_degats_not_zero: a_degats > 0
 		do
-			result:= a_degats * 2
+			result:= a_degats // 2
 		end
 
 	degat_4(a_degats:INTEGER):INTEGER

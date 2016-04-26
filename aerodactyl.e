@@ -13,15 +13,15 @@ inherit
 		end
 	PIERRE
 		rename
-			degat_1 as gerer_1, degat_3 as gerer_3
+			degat_1 as gerer_1, degat_2 as gerer_2, degat_3 as gerer_3
 		select
-			gerer_1, gerer_3
+			gerer_1, gerer_2, gerer_3
 		end
 	VOLANT
 		rename
-			degat_2 as gerer_2, degat_4 as gerer_4
+			degat_4 as gerer_4
 		select
-			gerer_2, gerer_4
+			gerer_4
 		end
 
 create

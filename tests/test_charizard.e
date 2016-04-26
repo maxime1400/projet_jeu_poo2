@@ -22,10 +22,10 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			type:= 1
-			degats:= 40
+			degats:= 10
 			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 90)
+			assert ("CREATURE test attaque_recu", vie ~ 95)
 		end
 
 	test_attaque_2
@@ -38,7 +38,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			type:= 2
-			degats:= 20
+			degats:= 10
 			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
 			assert ("CREATURE test attaque_recu", vie ~ 90)
@@ -54,10 +54,10 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			type:= 3
-			degats:= 20
+			degats:= 10
 			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 90)
+			assert ("CREATURE test attaque_recu", vie ~ 95)
 		end
 
 	test_attaque_4
@@ -70,10 +70,10 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			type:= 4
-			degats:= 20
+			degats:= 10
 			new_creature.attaque_recu(type, degats)
 			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 90)
+			assert ("CREATURE test attaque_recu", vie ~ 80)
 		end
 
 end
