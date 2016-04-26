@@ -25,6 +25,12 @@ feature -- accès
 			result:= vie
 		end
 
+	set_vie(a_vie:INTEGER)
+		-- set le nombre restant de vie de la créature
+		do
+			vie:=a_vie
+		end
+
 	soustrait_vie(a_degats:INTEGER)
 		-- soustrait la vie par l'argument envoyé
 		do
