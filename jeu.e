@@ -98,6 +98,7 @@ feature {NONE} -- Implémentation
 
 			if etape_combat = 4 then
 				etape_combat:= 1
+				a_heros.set_vie(100)
 				l_must_redraw:= true
 			end
 
@@ -225,13 +226,15 @@ feature {NONE} -- Implémentation
 
 				apparition_creature (l_window, a_heros)
 
-				apparition_attaque (l_window)
+				apparition_attaque_joueur (l_window, a_heros)
 
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
 									0, 0,
 									500, 250,
 									0, 80)
+
+				apparition_attaque_ennemi (l_window, a_heros)
 
 			elseif etape_combat = 5 then
 				create l_img_game_over
@@ -321,32 +324,61 @@ feature {NONE} -- Implémentation
 			a_window.surface.draw_sub_surface (l_creature, 0, 0, 250, 250, 250, 0)
 		end
 
-	apparition_attaque (a_window: GAME_WINDOW_SURFACED)
+	apparition_attaque_joueur(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
 		local
 			l_feu: 		IMG_ATTACK_FIRE
 			l_ice: 		IMG_ATTACK_ICE
 			l_sword: 	IMG_ATTACK_SWORD
 			l_rock:		IMG_ATTACK_ROCK
 			l_vide: 	IMG_VIDE
-			l_attack: 	GAME_SURFACE
+			l_attack_joueur: GAME_SURFACE
 		do
-			if choix_attaque = 1 then
-				create l_feu
-				l_attack := l_feu
-			elseif choix_attaque = 2 then
-				create l_ice
-				l_attack := l_ice
-			elseif choix_attaque = 3 then
-				create l_sword
-				l_attack := l_sword
-			elseif choix_attaque = 4 then
-				create l_rock
-				l_attack := l_rock
-			else
-				create l_vide
-				l_attack := l_vide
+			if choix_attaque /= 0 then
+				if choix_attaque = 1 then
+					create l_feu
+					l_attack_joueur := l_feu
+				elseif choix_attaque = 2 then
+					create l_ice
+					l_attack_joueur := l_ice
+				elseif choix_attaque = 3 then
+					create l_sword
+					l_attack_joueur := l_sword
+				elseif choix_attaque = 4 then
+					create l_rock
+					l_attack_joueur := l_rock
+				else
+					create l_vide
+					l_attack_joueur := l_vide
+				end
+
+				a_window.surface.draw_sub_surface (l_attack_joueur, 0, 0, 250, 250, 250, 0)
 			end
-			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
+		end
+
+	apparition_attaque_ennemi(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+		local
+			l_feu: 		IMG_ATTACK_FIRE
+			l_ice: 		IMG_ATTACK_ICE
+			l_rock:		IMG_ATTACK_ROCK
+			l_vide: 	IMG_VIDE
+			l_attack_ennemi: GAME_SURFACE
+		do
+			if choix_attaque /= 0 then
+				if a_heros.get_determinant_creature = 1 then
+					create l_feu
+					l_attack_ennemi := l_feu
+				elseif a_heros.get_determinant_creature = 2 then
+					create l_rock
+					l_attack_ennemi := l_rock
+				elseif a_heros.get_determinant_creature = 3 then
+					create l_ice
+					l_attack_ennemi := l_ice
+				else
+					create l_vide
+					l_attack_ennemi := l_vide
+				end
+				a_window.surface.draw_sub_surface (l_attack_ennemi, 0, 0, 250, 250, 0, 80)
+			end
 		end
 
 	who_is_creature(a_determinant_creature: NATURAL_32):CREATURE
