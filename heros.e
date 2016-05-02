@@ -318,6 +318,29 @@ feature -- Accès
 			determinant_correct: determinant_creature <= 3
 		end
 
+	dommages(a_nombre:INTEGER)
+			-- modifie le nombre de pas
+		do
+			vie_heros:= vie_heros - a_nombre
+			if vie_heros < 0 then
+				vie_heros:= 0
+			end
+		ensure
+			vie_heros_zero: determinant_creature >= 0
+		end
+
+	get_vie:INTEGER
+			-- retourne le nombre de pas
+		do
+			result:= vie_heros
+		end
+
+	set_vie(a_nombre:INTEGER)
+			-- retourne le nombre de pas
+		do
+			vie_heros:= a_nombre
+		end
+
 feature {NONE} -- implémentation
 
 	l_sound:AUDIO_SOUND_FILE
@@ -355,6 +378,9 @@ feature {NONE} -- variables & constantes
 
 	determinant_creature:NATURAL_32
 			-- La créature qui apparaîtra lors du combat
+
+	vie_heros:INTEGER
+			-- Représente la vie du joueur
 
 
 invariant

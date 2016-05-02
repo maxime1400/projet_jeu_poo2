@@ -55,6 +55,7 @@ feature {NONE} -- Constructeur
 				create l_heros
 				l_heros.y := 250
 				l_heros.x := 250
+				l_heros.set_vie(100)
 				if not l_heros.has_error then
 					create l_window_builder
 					l_window_builder.set_dimension (500, 500)
@@ -92,8 +93,15 @@ feature {NONE} -- Implémentation
 				l_must_redraw := True
 				last_redraw_time := game_library.time_since_create
 			end
+
 			create l_area_dirty.make(2)
+
 			if etape_combat = 4 then
+				etape_combat:= 1
+				l_must_redraw:= true
+			end
+
+			if etape_combat = 6 then
 				etape_combat:= 1
 				l_must_redraw:= true
 			end
@@ -141,17 +149,30 @@ feature {NONE} -- Implémentation
 					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
 					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
 					l_window.update_rectangles (l_area_dirty)
+					if choix_attaque /= 0 then
+						a_heros.dommages(15)
+					end
 					dommage_creature(ennemi)
 				end
+
 				if ennemi.get_vie = 0 then
 					etape_combat:= 4
+				end
+				if a_heros.get_vie = 0 then
+					etape_combat:= 5
+				end
+
+			elseif etape_combat = 5 then
+				if l_must_redraw then
+					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
+					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
+					l_window.update_rectangles (l_area_dirty)
 				end
 			end
 		end
 
 
 	doit_redessiner(l_window:GAME_WINDOW_SURFACED; a_heros:HEROS; l_must_redraw:BOOLEAN; l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]])
-			--
 		do
 			if l_must_redraw then
 				-- Force la redéfinition de l'ensemble de la fenêtre
@@ -168,6 +189,8 @@ feature {NONE} -- Implémentation
 					a_image:GAME_SURFACE; a_heros:HEROS;
 					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
+		local
+			l_img_game_over:IMG_GAME_OVER
 		do
 			if etape_combat = 1 then
 
@@ -203,14 +226,21 @@ feature {NONE} -- Implémentation
 				apparition_creature (l_window, a_heros)
 
 				apparition_attaque (l_window)
---				dommage_creature (ennemi)
 
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
 									0, 0,
 									500, 250,
-									0, 80
-								)
+									0, 80)
+
+			elseif etape_combat = 5 then
+				create l_img_game_over
+
+				l_window.surface.draw_sub_surface (
+									l_img_game_over,
+									0, 0,
+									500, 500,
+									0, 0)
 			end
 		end
 
@@ -231,9 +261,7 @@ feature {NONE} -- Implémentation
 						a_heros.go_down(a_timestamp)
 					end
 				elseif etape_combat = 3 then
-					if a_key_state.is_return then
-						etape_combat:= 4
-					elseif a_key_state.is_A then
+					if a_key_state.is_A then
 						choix_attaque:= 1	-- feu
 					elseif a_key_state.is_S then
 						choix_attaque:= 2	-- glace
@@ -241,6 +269,11 @@ feature {NONE} -- Implémentation
 						choix_attaque:= 3	-- épée
 					elseif a_key_state.is_X then
 						choix_attaque:= 4	-- roche
+					end
+				elseif etape_combat = 5 then
+					if a_key_state.is_return then
+						a_heros.set_vie(100)
+						etape_combat:= 6
 					end
 				end
 			end
@@ -349,10 +382,12 @@ feature {NONE} -- Variables
 
 	etape_combat:INTEGER
 			-- 1=pas en combat, 2=initialisation du combat 3=combat en cours, 4=vient de sortir du combat
+			-- 5= Game Over, 6= vient de sortir du Game Over
 
 	choix_attaque:INTEGER
 			-- 1= feu, 2= glace, 3=épée, 4=roche
 
 	ennemi:CREATURE
+			-- Objet des ennemis que le joueur affronte
 
 end
