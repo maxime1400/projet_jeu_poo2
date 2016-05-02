@@ -27,6 +27,7 @@ feature {NONE} -- Constructeur
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
 			etape_combat:= 1
+			create ennemi.create_creature (100)
 			run_game
 			image_file_library.quit_library
 			audio_library.quit_library
@@ -43,14 +44,12 @@ feature {NONE} -- Constructeur
 			l_musique:MUSIQUE
 			l_fond_combat:FOND_COMBAT
 			l_img_heros:IMG_HEROS
-			l_creature:CREATURE
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
 			create l_fond_combat
 			create l_img_heros
 			create l_heros
-			create l_creature.create_creature (100)
 
 			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
 				create l_heros
@@ -64,10 +63,9 @@ feature {NONE} -- Constructeur
 					game_library.quit_signal_actions.extend (agent on_quit)
 					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
 					l_window.key_released_actions.extend (agent on_key_released(?,?,  l_heros))
-					l_creature:= who_is_creature(l_heros.get_determinant_creature)
 					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond,
-															l_window, False, l_fond_combat, l_img_heros, l_creature))
-					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros, l_creature)
+															l_window, False, l_fond_combat, l_img_heros))
+					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros)
 					last_redraw_time := game_library.time_since_create
 					game_library.launch
 				else
@@ -83,7 +81,7 @@ feature {NONE} -- Constructeur
 feature {NONE} -- Implémentation
 
 	on_iteration(a_timestamp:NATURAL_32; a_heros:HEROS; a_image:GAME_SURFACE; l_window:GAME_WINDOW_SURFACED;
-					a_must_redraw:BOOLEAN; a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE; a_creature:CREATURE)
+					a_must_redraw:BOOLEAN; a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Événement qui est lancé à chaque itération
 		local
 			l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]]
@@ -96,7 +94,6 @@ feature {NONE} -- Implémentation
 			end
 			create l_area_dirty.make(2)
 			if etape_combat = 4 then
-				a_creature.set_vie (100)
 				etape_combat:= 1
 				l_must_redraw:= true
 			end
@@ -128,7 +125,7 @@ feature {NONE} -- Implémentation
 						a_heros.y := a_image.height - a_heros.sub_image_height
 					end
 
-					dessine_scene(l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros, a_creature)
+					dessine_scene(l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
 
 					-- Mise à jour de la modification dans l'écran
 					l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
@@ -136,18 +133,17 @@ feature {NONE} -- Implémentation
 				end
 
 			elseif etape_combat = 2 then
+				ennemi:= who_is_creature(a_heros.get_determinant_creature)
 				etape_combat:= 3
 
 			elseif etape_combat = 3 then
 				if l_must_redraw then
 					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
-					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros, a_creature)
+					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
 					l_window.update_rectangles (l_area_dirty)
-					dommage_creature (a_creature)
-					print(" ")
-					print(a_creature.get_vie)
+					dommage_creature(ennemi)
 				end
-				if a_creature.get_vie = 0 then
+				if ennemi.get_vie = 0 then
 					etape_combat:= 4
 				end
 			end
@@ -170,7 +166,7 @@ feature {NONE} -- Implémentation
 	dessine_scene(l_window:GAME_WINDOW_SURFACED;
 					l_area_dirty:ARRAYED_LIST[TUPLE[x,y,width,height:INTEGER]];
 					a_image:GAME_SURFACE; a_heros:HEROS;
-					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE; a_creature: CREATURE)
+					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
 		do
 			if etape_combat = 1 then
@@ -207,7 +203,7 @@ feature {NONE} -- Implémentation
 				apparition_creature (l_window, a_heros)
 
 				apparition_attaque (l_window)
---				dommage_creature (a_creature)
+--				dommage_creature (ennemi)
 
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
@@ -339,10 +335,10 @@ feature {NONE} -- Implémentation
 			end
 		end
 
-	dommage_creature (a_creature: CREATURE)
+	dommage_creature (a_ennemi:CREATURE)
 		-- envoi les dommages à l'objet de type CREATURE
 	do
-		a_creature.attaque_recu (choix_attaque, 10)
+		a_ennemi.attaque_recu (choix_attaque, 10)
 		choix_attaque:= 0
 	end
 
@@ -356,5 +352,7 @@ feature {NONE} -- Variables
 
 	choix_attaque:INTEGER
 			-- 1= feu, 2= glace, 3=épée, 4=roche
+
+	ennemi:CREATURE
 
 end
