@@ -354,5 +354,6 @@ feature {NONE} -- Variables
 			-- 1= feu, 2= glace, 3=épée, 4=roche
 
 	ennemi:CREATURE
+			-- Objet des ennemis que le joueur affronte
 
 end
