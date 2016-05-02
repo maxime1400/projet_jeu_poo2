@@ -26,7 +26,8 @@ feature {NONE} -- Constructeur
 			audio_library.enable_sound
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
-			indicateur_combat:= 1
+			etape_combat:= 1
+			create ennemi.create_creature (100)
 			run_game
 			image_file_library.quit_library
 			audio_library.quit_library
@@ -62,7 +63,8 @@ feature {NONE} -- Constructeur
 					game_library.quit_signal_actions.extend (agent on_quit)
 					l_window.key_pressed_actions.extend (agent on_key_pressed(?, ?, l_heros))
 					l_window.key_released_actions.extend (agent on_key_released(?,?,  l_heros))
-					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond, l_window, False, l_fond_combat, l_img_heros))
+					game_library.iteration_actions.extend (agent on_iteration(?, l_heros, l_fond,
+															l_window, False, l_fond_combat, l_img_heros))
 					on_iteration(0, l_heros, l_fond, l_window, True, l_fond_combat, l_img_heros)
 					last_redraw_time := game_library.time_since_create
 					game_library.launch
@@ -91,12 +93,12 @@ feature {NONE} -- Implémentation
 				last_redraw_time := game_library.time_since_create
 			end
 			create l_area_dirty.make(2)
-			if indicateur_combat = 3 then
-				indicateur_combat:= 1
+			if etape_combat = 4 then
+				etape_combat:= 1
 				l_must_redraw:= true
 			end
 
-			if indicateur_combat = 1 then
+			if etape_combat = 1 then
 
 				doit_redessiner (l_window, a_heros, l_must_redraw, l_area_dirty)
 
@@ -105,7 +107,7 @@ feature {NONE} -- Implémentation
 				end
 				if a_heros.get_compteur_pas > 10 then
 					a_heros.set_compteur_pas(0)
-					indicateur_combat:= 2
+					etape_combat:= 2
 				end
 
 				a_heros.update (a_timestamp)	-- Met à jour l'animation du personnage et le coordonne
@@ -130,14 +132,21 @@ feature {NONE} -- Implémentation
 					l_window.update_rectangles (l_area_dirty)
 				end
 
-			elseif indicateur_combat = 2 then
+			elseif etape_combat = 2 then
+				ennemi:= who_is_creature(a_heros.get_determinant_creature)
+				etape_combat:= 3
 
+			elseif etape_combat = 3 then
 				if l_must_redraw then
 					doit_redessiner(l_window, a_heros, l_must_redraw, l_area_dirty)
 					dessine_scene (l_window, l_area_dirty, a_image, a_heros, a_fond_combat, a_img_heros)
+					l_window.update_rectangles (l_area_dirty)
+					dommage_creature(ennemi)
+				end
+				if ennemi.get_vie = 0 then
+					etape_combat:= 4
 				end
 			end
-			l_window.update_rectangles (l_area_dirty)
 		end
 
 
@@ -147,7 +156,7 @@ feature {NONE} -- Implémentation
 			if l_must_redraw then
 				-- Force la redéfinition de l'ensemble de la fenêtre
 				l_area_dirty.extend ([0, 0, l_window.width, l_window.height])
-			elseif l_must_redraw = false AND indicateur_combat /= 2 then
+			elseif l_must_redraw = false AND etape_combat /= 2 then
 				-- Redessine seulement l'endroit où était le personnage
 				l_area_dirty.extend ([a_heros.x, a_heros.y, a_heros.sub_image_width, a_heros.sub_image_height])
 			end
@@ -160,7 +169,7 @@ feature {NONE} -- Implémentation
 					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
 		do
-			if indicateur_combat = 1 then
+			if etape_combat = 1 then
 
 				l_window.surface.draw_rectangle (
 									create {GAME_COLOR}.make_rgb (0, 128, 255),
@@ -176,7 +185,7 @@ feature {NONE} -- Implémentation
 				l_window.surface.draw_sub_surface (a_heros.surface, a_heros.sub_image_x, a_heros.sub_image_y,
 										a_heros.sub_image_width, a_heros.sub_image_height, a_heros.x, a_heros.y)
 
-			elseif indicateur_combat = 2 then
+			elseif etape_combat = 3 then
 
 				l_window.surface.draw_rectangle (
 										create {GAME_COLOR}.make_rgb (0, 128, 255),
@@ -194,6 +203,7 @@ feature {NONE} -- Implémentation
 				apparition_creature (l_window, a_heros)
 
 				apparition_attaque (l_window)
+--				dommage_creature (ennemi)
 
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
@@ -210,7 +220,7 @@ feature {NONE} -- Implémentation
 		do
 			if not a_key_state.is_repeat then		-- S'assure que l'événement n'est pas seulement une répétition de la clé
 
-				if indicateur_combat = 1 then
+				if etape_combat = 1 then
 					if a_key_state.is_right then
 						a_heros.go_right(a_timestamp)
 					elseif a_key_state.is_left then
@@ -220,17 +230,17 @@ feature {NONE} -- Implémentation
 					elseif a_key_state.is_down then
 						a_heros.go_down(a_timestamp)
 					end
-				elseif indicateur_combat = 2 then
+				elseif etape_combat = 3 then
 					if a_key_state.is_return then
-						indicateur_combat:= 3
+						etape_combat:= 4
 					elseif a_key_state.is_A then
-						choix_attaque:= 1
+						choix_attaque:= 1	-- feu
 					elseif a_key_state.is_S then
-						choix_attaque:= 2
+						choix_attaque:= 2	-- glace
 					elseif a_key_state.is_Z then
-						choix_attaque:= 3
+						choix_attaque:= 3	-- épée
 					elseif a_key_state.is_X then
-						choix_attaque:= 4
+						choix_attaque:= 4	-- roche
 					end
 				end
 			end
@@ -304,19 +314,45 @@ feature {NONE} -- Implémentation
 				l_attack := l_vide
 			end
 			a_window.surface.draw_sub_surface (l_attack, 0, 0, 250, 250, 250, 0)
-			choix_attaque:= 0
 		end
+
+	who_is_creature(a_determinant_creature: NATURAL_32):CREATURE
+		-- Renvoi un objet de type CREATURE
+		local
+			charizard:CHARIZARD
+			aerodactyl:AERODACTYL
+			gyarados:GYARADOS
+		do
+			if a_determinant_creature = 1 then
+				create charizard.create_creature(100)
+				result:= charizard
+			elseif a_determinant_creature = 2 then
+				create aerodactyl.create_creature(100)
+				result:= aerodactyl
+			else
+				create gyarados.create_creature(100)
+				result:= gyarados
+			end
+		end
+
+	dommage_creature (a_ennemi:CREATURE)
+		-- envoi les dommages à l'objet de type CREATURE
+	do
+		a_ennemi.attaque_recu (choix_attaque, 10)
+		choix_attaque:= 0
+	end
 
 feature {NONE} -- Variables
 
 	last_redraw_time:NATURAL_32
 			-- La dernière fois que la totalité de l'écran a été redessinée
 
-	indicateur_combat:INTEGER
-
-			-- 1=pas en combat, 2=combat en cours, 3=vient de sortir du combat
+	etape_combat:INTEGER
+			-- 1=pas en combat, 2=initialisation du combat 3=combat en cours, 4=vient de sortir du combat
 
 	choix_attaque:INTEGER
-			-- Nombre de l'attaque choisi par le joueur
+			-- 1= feu, 2= glace, 3=épée, 4=roche
+
+	ennemi:CREATURE
 
 end
