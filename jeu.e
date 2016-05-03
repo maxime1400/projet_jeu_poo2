@@ -21,17 +21,11 @@ create
 feature {NONE} -- Constructeur
 
 	make_game
+	local
 		do
-			game_library.enable_video
-			audio_library.enable_sound
-			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
-			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
 			etape_combat:= 1
 			create ennemi.create_creature (100)
 			run_game
-			image_file_library.quit_library
-			audio_library.quit_library
-			game_library.quit_library
 		end
 
 	run_game
