@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_CHARIZARD
+	IMAGE_CHARIZARD
 
 inherit
 	GAME_SURFACE

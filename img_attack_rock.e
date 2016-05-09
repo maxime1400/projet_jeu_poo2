@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_ATTACK_ROCK
+	IMAGE_ATTACK_ROCK
 
 inherit
 	GAME_SURFACE

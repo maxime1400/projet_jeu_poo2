@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_HEROS
+	IMAGE_HEROS
 
 inherit
 	GAME_SURFACE

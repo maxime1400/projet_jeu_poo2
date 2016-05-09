@@ -12,18 +12,12 @@ create
 feature --constructeur
 
 	create_creature(a_vie:INTEGER)
-		-- constructeur
+		-- reçoit un nombre `a_vie' qui représente le nombre de points de vie de la créature
 		do
 			vie:= a_vie
 		end
 
 feature -- accès
-
-	get_vie:INTEGER
-		-- retourne le nombre restant de vie de la créature
-		do
-			result:= vie
-		end
 
 	set_vie(a_vie:INTEGER)
 		-- set le nombre restant de vie de la créature
@@ -32,7 +26,7 @@ feature -- accès
 		end
 
 	soustrait_vie(a_degats:INTEGER)
-		-- soustrait la vie par l'argument envoyé
+		-- soustrait `vie' par l'argument envoyé
 		do
 			vie:= vie - a_degats
 			if vie < 0 then
@@ -43,7 +37,8 @@ feature -- accès
 		end
 
 	attaque_recu(a_type:INTEGER; a_degats:INTEGER)
-		--	Gère une attaque faite à la créature. La liste doit avoir deux cases, une pour le type, une pour les dégats.
+		--	Gère une attaque faite à la créature.
+		--  La liste doit avoir deux cases, une pour le type, une pour les dégats.
 		do
 			soustrait_vie(a_degats)
 		end
@@ -51,5 +46,6 @@ feature -- accès
 feature -- variables
 
 	vie: INTEGER
+		-- nombre représentant la quantité de points de vie d'une créature
 
 end

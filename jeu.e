@@ -11,9 +11,6 @@ class
 
 inherit
 	GAME_LIBRARY_SHARED
-	IMG_LIBRARY_SHARED
-	AUDIO_LIBRARY_SHARED
-	EXCEPTIONS
 
 create
 	make_game
@@ -37,7 +34,7 @@ feature {NONE} -- Constructeur
 			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
 			l_fond_combat:FOND_COMBAT
-			l_img_heros:IMG_HEROS
+			l_img_heros:IMAGE_HEROS
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
@@ -150,7 +147,7 @@ feature {NONE} -- Implémentation
 					dommage_creature(ennemi)
 				end
 
-				if ennemi.get_vie = 0 then
+				if ennemi.vie = 0 then
 					etape_combat:= 4
 				end
 				if a_heros.get_vie = 0 then
@@ -185,7 +182,7 @@ feature {NONE} -- Implémentation
 					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
 		local
-			l_img_game_over:IMG_GAME_OVER
+			l_img_game_over:IMAGE_GAME_OVER
 		do
 			if etape_combat = 1 then
 
@@ -300,9 +297,9 @@ feature {NONE} -- Implémentation
 
 	apparition_creature (a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
 		local
-			l_aerodactyl: IMG_AERODACTYL
-			l_charizard: IMG_CHARIZARD
-			l_gyarados: IMG_GYARADOS
+			l_aerodactyl: IMAGE_AERODACTYL
+			l_charizard: IMAGE_CHARIZARD
+			l_gyarados: IMAGE_GYARADOS
 			l_creature: GAME_SURFACE
 		do
 			if a_heros.get_determinant_creature = 1 then
@@ -320,11 +317,11 @@ feature {NONE} -- Implémentation
 
 	apparition_attaque_joueur(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
 		local
-			l_feu: 		IMG_ATTACK_FIRE
-			l_ice: 		IMG_ATTACK_ICE
-			l_sword: 	IMG_ATTACK_SWORD
-			l_rock:		IMG_ATTACK_ROCK
-			l_vide: 	IMG_VIDE
+			l_feu: 		IMAGE_ATTACK_FIRE
+			l_ice: 		IMAGE_ATTACK_ICE
+			l_sword: 	IMAGE_ATTACK_SWORD
+			l_rock:		IMAGE_ATTACK_ROCK
+			l_vide: 	IMAGE_VIDE
 			l_attack_joueur: GAME_SURFACE
 		do
 			if choix_attaque /= 0 then
@@ -351,10 +348,10 @@ feature {NONE} -- Implémentation
 
 	apparition_attaque_ennemi(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
 		local
-			l_feu: 		IMG_ATTACK_FIRE
-			l_ice: 		IMG_ATTACK_ICE
-			l_rock:		IMG_ATTACK_ROCK
-			l_vide: 	IMG_VIDE
+			l_feu: 		IMAGE_ATTACK_FIRE
+			l_ice: 		IMAGE_ATTACK_ICE
+			l_rock:		IMAGE_ATTACK_ROCK
+			l_vide: 	IMAGE_VIDE
 			l_attack_ennemi: GAME_SURFACE
 		do
 			if choix_attaque /= 0 then

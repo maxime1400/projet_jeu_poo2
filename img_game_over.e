@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet"
 
 class
-	IMG_GAME_OVER
+	IMAGE_GAME_OVER
 
 inherit
 	GAME_SURFACE

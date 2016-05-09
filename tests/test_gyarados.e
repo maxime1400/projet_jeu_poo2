@@ -24,8 +24,8 @@ feature -- Test routines
 			type:= 1
 			degats:= 40
 			new_creature.attaque_recu(type, degats)
-			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 90)
+			vie:= new_creature.vie
+			assert ("CREATURE test attaque_recu", vie ~ 80)
 		end
 
 	test_attaque_2
@@ -40,8 +40,8 @@ feature -- Test routines
 			type:= 2
 			degats:= 20
 			new_creature.attaque_recu(type, degats)
-			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 80)
+			vie:= new_creature.vie
+			assert ("CREATURE test attaque_recu", vie ~ 60)
 		end
 
 	test_attaque_3
@@ -56,8 +56,8 @@ feature -- Test routines
 			type:= 3
 			degats:= 20
 			new_creature.attaque_recu(type, degats)
-			vie:= new_creature.get_vie
-			assert ("CREATURE test attaque_recu", vie ~ 80)
+			vie:= new_creature.vie
+			assert ("CREATURE test attaque_recu", vie ~ 90)
 		end
 
 	test_attaque_4
@@ -72,7 +72,7 @@ feature -- Test routines
 			type:= 4
 			degats:= 20
 			new_creature.attaque_recu(type, degats)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test attaque_recu", vie ~ 90)
 		end
 

@@ -35,20 +35,18 @@ feature {NONE} --méthodes du thread
 	execute
 		local
 			l_serveur_socket: NETWORK_STREAM_SOCKET
-			l_client_socket: NETWORK_STREAM_SOCKET
 		do
 			create l_serveur_socket.make_server_by_port (1234)
+			l_serveur_socket.listen (1)
+			l_serveur_socket.accept
 			from
 			until
 				must_stop
 			loop
-				l_serveur_socket.listen (1)
-				l_serveur_socket.accept
-				--l_client_socket:= l_serveur_socket.accepted
-				--l_client_socket.read_line
-				--message_recu:= l_client_socket.last_integer
+				l_serveur_socket.read_line
+				io.put_string ("Le client a dit: ")
+				io.put_string (l_serveur_socket.last_string)
 			end
-			--l_client_socket.close
 			l_serveur_socket.close
 		end
 

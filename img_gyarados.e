@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_GYARADOS
+	IMAGE_GYARADOS
 
 inherit
 	GAME_SURFACE

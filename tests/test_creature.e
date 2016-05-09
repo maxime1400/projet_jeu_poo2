@@ -19,7 +19,7 @@ feature -- Test routines
 			vie: INTEGER
 		do
 			create new_creature.create_creature(100)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test retour valeur initiale", vie ~ 100)
 		end
 
@@ -31,7 +31,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			new_creature.soustrait_vie(20)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test diminution normale", vie ~ 80)
 		end
 
@@ -43,7 +43,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			new_creature.soustrait_vie(110)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test diminution à zéro", vie ~ 0)
 		end
 
@@ -55,7 +55,7 @@ feature -- Test routines
 		do
 			create new_creature.create_creature(100)
 			new_creature.soustrait_vie(0)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test diminution de zéro", vie ~ 100)
 		end
 
@@ -71,7 +71,7 @@ feature -- Test routines
 			type:= 1
 			degats:= 80
 			new_creature.attaque_recu(type, degats)
-			vie:= new_creature.get_vie
+			vie:= new_creature.vie
 			assert ("CREATURE test attaque_recu", vie ~ 20)
 		end
 end

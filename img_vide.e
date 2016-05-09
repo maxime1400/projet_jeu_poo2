@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_VIDE
+	IMAGE_VIDE
 
 inherit
 	GAME_SURFACE

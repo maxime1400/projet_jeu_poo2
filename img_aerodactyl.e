@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_AERODACTYL
+	IMAGE_AERODACTYL
 
 inherit
 	GAME_SURFACE

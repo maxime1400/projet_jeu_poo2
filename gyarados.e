@@ -13,15 +13,15 @@ inherit
 		end
 	DRAGON
 		rename
-			degat_1 as gerer_1,degat_3 as gerer_3, degat_4 as gerer_4
+			degat_1 as gerer_feu,degat_3 as gerer_epee, degat_4 as gerer_roche
 		select
-			gerer_1, gerer_3, gerer_4
+			gerer_feu, gerer_epee, gerer_roche
 		end
 	EAU
 		rename
-			degat_2 as gerer_2
+			degat_2 as degat_glace
 		select
-			gerer_2
+			degat_glace
 		end
 
 create
@@ -34,13 +34,13 @@ feature
 		do
 			if not (a_degats = 0) then
 				if a_type = 1 then
-					soustrait_vie(gerer_1(a_degats))
+					soustrait_vie(gerer_feu(a_degats))
 				elseif a_type = 2 then
-					soustrait_vie(gerer_2(a_degats))
+					soustrait_vie(degat_glace(a_degats))
 				elseif a_type = 3 then
-					soustrait_vie(gerer_3(a_degats))
+					soustrait_vie(gerer_epee(a_degats))
 				elseif a_type = 4 then
-					soustrait_vie(gerer_4(a_degats))
+					soustrait_vie(gerer_roche(a_degats))
 				end
 			end
 		end

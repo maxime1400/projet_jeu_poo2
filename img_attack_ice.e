@@ -7,7 +7,7 @@ note
 	modification	: "Steve Duquet et Maxime Laflamme"
 
 class
-	IMG_ATTACK_ICE
+	IMAGE_ATTACK_ICE
 
 inherit
 	GAME_SURFACE
