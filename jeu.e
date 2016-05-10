@@ -29,17 +29,17 @@ feature {NONE} -- Constructeur
 			-- Création des ressources et lancement du jeu
 		local
 			l_window_builder:GAME_WINDOW_SURFACED_BUILDER
-			l_fond:FOND_JEU
+			l_fond:IMAGE_JEU
 			l_heros:HEROS
 			l_window:GAME_WINDOW_SURFACED
 			l_musique:MUSIQUE
-			l_fond_combat:FOND_COMBAT
-			l_img_heros:IMAGE_HEROS
+			l_fond_combat:IMAGE_JEU
+			l_img_heros:IMAGE_JEU
 		do
 			create l_musique.make("./sons/musique_fond.wav")
-			create l_fond
-			create l_fond_combat
-			create l_img_heros
+			create l_fond.nouvelle_image("./images/terrain.png")
+			create l_fond_combat.nouvelle_image ("./images/fond_combat.png")
+			create l_img_heros.nouvelle_image ("./images/heros_combat.png")
 			create l_heros
 
 			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
@@ -182,7 +182,7 @@ feature {NONE} -- Implémentation
 					a_fond_combat:GAME_SURFACE; a_img_heros:GAME_SURFACE)
 			-- Dessine la scène (ne redessine pas ce que nous n'avons pas à redessiner)
 		local
-			l_img_game_over:IMAGE_GAME_OVER
+			l_img_game_over:IMAGE_JEU
 		do
 			if etape_combat = 1 then
 
@@ -215,9 +215,9 @@ feature {NONE} -- Implémentation
 									0, 0
 								)
 
-				apparition_creature (l_window, a_heros)
+				apparition_creature (l_window, a_heros.get_determinant_creature)
 
-				apparition_attaque_joueur (l_window, a_heros)
+				apparition_attaque_joueur (l_window)
 
 				l_window.surface.draw_sub_surface (
 									a_img_heros,
@@ -225,10 +225,10 @@ feature {NONE} -- Implémentation
 									500, 250,
 									0, 80)
 
-				apparition_attaque_ennemi (l_window, a_heros)
+				apparition_attaque_ennemi (l_window, a_heros.get_determinant_creature)
 
 			elseif etape_combat = 5 then
-				create l_img_game_over
+				create l_img_game_over.nouvelle_image ("./images/game_over.png")
 
 				l_window.surface.draw_sub_surface (
 									l_img_game_over,
@@ -295,79 +295,62 @@ feature {NONE} -- Implémentation
 			game_library.stop  -- Arrête la boucle de commande (game_library.launch pour revenir)
 		end
 
-	apparition_creature (a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+	apparition_creature (a_window: GAME_WINDOW_SURFACED; a_determinant_creature: NATURAL_32)
 		local
-			l_aerodactyl: IMAGE_AERODACTYL
-			l_charizard: IMAGE_CHARIZARD
-			l_gyarados: IMAGE_GYARADOS
+			l_image: IMAGE_JEU
 			l_creature: GAME_SURFACE
 		do
-			if a_heros.get_determinant_creature = 1 then
-				create l_charizard
-				l_creature := l_charizard
-			elseif a_heros.get_determinant_creature = 2 then
-				create l_aerodactyl
-				l_creature := l_aerodactyl
+			if a_determinant_creature = 1 then
+				create l_image.nouvelle_image ("./images/charizard.png")
+			elseif a_determinant_creature = 2 then
+				create l_image.nouvelle_image ("./images/aerodactyl.png")
 			else
-				create l_gyarados
-				l_creature := l_gyarados
+				create l_image.nouvelle_image ("./images/gyarados.png")
 			end
+			l_creature:= l_image
 			a_window.surface.draw_sub_surface (l_creature, 0, 0, 250, 250, 250, 0)
 		end
 
-	apparition_attaque_joueur(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+	apparition_attaque_joueur(a_window: GAME_WINDOW_SURFACED)
 		local
-			l_feu: 		IMAGE_ATTACK_FIRE
-			l_ice: 		IMAGE_ATTACK_ICE
-			l_sword: 	IMAGE_ATTACK_SWORD
-			l_rock:		IMAGE_ATTACK_ROCK
-			l_vide: 	IMAGE_VIDE
+			l_image: IMAGE_JEU
 			l_attack_joueur: GAME_SURFACE
 		do
 			if choix_attaque /= 0 then
 				if choix_attaque = 1 then
-					create l_feu
-					l_attack_joueur := l_feu
+					create l_image.nouvelle_image ("./images/attack_fire.png")
 				elseif choix_attaque = 2 then
-					create l_ice
-					l_attack_joueur := l_ice
+					create l_image.nouvelle_image ("./images/attack_ice.png")
 				elseif choix_attaque = 3 then
-					create l_sword
-					l_attack_joueur := l_sword
+					create l_image.nouvelle_image ("./images/attack_sword.png")
 				elseif choix_attaque = 4 then
-					create l_rock
-					l_attack_joueur := l_rock
+					create l_image.nouvelle_image ("./images/attack_rock.png")
 				else
-					create l_vide
-					l_attack_joueur := l_vide
+					create l_image.nouvelle_image ("./images/vide.png")
 				end
 
+				l_attack_joueur := l_image
 				a_window.surface.draw_sub_surface (l_attack_joueur, 0, 0, 250, 250, 250, 0)
 			end
 		end
 
-	apparition_attaque_ennemi(a_window: GAME_WINDOW_SURFACED; a_heros: HEROS)
+	apparition_attaque_ennemi(a_window: GAME_WINDOW_SURFACED; a_determinant_creature: NATURAL_32)
 		local
-			l_feu: 		IMAGE_ATTACK_FIRE
-			l_ice: 		IMAGE_ATTACK_ICE
-			l_rock:		IMAGE_ATTACK_ROCK
-			l_vide: 	IMAGE_VIDE
+			l_image: IMAGE_JEU
 			l_attack_ennemi: GAME_SURFACE
 		do
 			if choix_attaque /= 0 then
-				if a_heros.get_determinant_creature = 1 then
-					create l_feu
-					l_attack_ennemi := l_feu
-				elseif a_heros.get_determinant_creature = 2 then
-					create l_rock
-					l_attack_ennemi := l_rock
-				elseif a_heros.get_determinant_creature = 3 then
-					create l_ice
-					l_attack_ennemi := l_ice
+				if a_determinant_creature = 1 then
+					create l_image.nouvelle_image ("./images/attack_fire.png")
+				elseif a_determinant_creature = 2 then
+					create l_image.nouvelle_image ("./images/attack_rock.png")
+				elseif a_determinant_creature = 3 then
+					create l_image.nouvelle_image ("./images/attack_ice.png")
 				else
-					create l_vide
-					l_attack_ennemi := l_vide
+					create l_image.nouvelle_image ("./images/vide.png")
 				end
+
+				l_attack_ennemi:= l_image
 				a_window.surface.draw_sub_surface (l_attack_ennemi, 0, 0, 250, 250, 0, 80)
 			end
 		end
