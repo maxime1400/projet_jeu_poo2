@@ -35,12 +35,13 @@ feature {NONE} -- Constructeur
 			l_musique:MUSIQUE
 			l_fond_combat:FOND_COMBAT
 			l_img_heros:IMAGE_HEROS
+			l_serveur_reseau:SERVEUR_RESEAU
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond
 			create l_fond_combat
 			create l_img_heros
-			create l_heros
+			create l_serveur_reseau.make
 
 			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
 				create l_heros

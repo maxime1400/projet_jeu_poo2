@@ -43,7 +43,7 @@ feature {NONE} --méthodes du thread
 			until
 				must_stop
 			loop
-				l_serveur_socket.read_line
+				l_serveur_socket.read_stream
 				io.put_string ("Le client a dit: ")
 				io.put_string (l_serveur_socket.last_string)
 			end
