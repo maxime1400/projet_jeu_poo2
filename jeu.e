@@ -35,16 +35,13 @@ feature {NONE} -- Constructeur
 			l_musique:MUSIQUE
 			l_fond_combat:IMAGE_JEU
 			l_img_heros:IMAGE_JEU
-			l_serveur_reseau:SERVEUR_RESEAU
 		do
 			create l_musique.make("./sons/musique_fond.wav")
 			create l_fond.nouvelle_image("./images/terrain.png")
 			create l_fond_combat.nouvelle_image("./images/fond_combat.png")
 			create l_img_heros.nouvelle_image("./images/heros_combat.png")
-			create l_serveur_reseau.make
 
 			if not (l_fond.has_error and l_fond_combat.has_error and l_img_heros.has_error and l_img_heros.has_error) then
-				l_serveur_reseau.launch
 				create l_heros
 				l_heros.y := 250
 				l_heros.x := 250

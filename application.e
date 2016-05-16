@@ -21,7 +21,10 @@ feature {NONE} -- Constructeur
 	make_serveur
 		local
 			jeu: JEU
+			l_serveur: SERVEUR_RESEAU
 		do
+			create l_serveur.make
+			l_serveur.launch
 			game_library.enable_video
 			audio_library.enable_sound
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
@@ -37,7 +40,10 @@ feature {NONE} -- Constructeur
 	make_client
 		local
 			jeu: JEU
+			l_client: CLIENT_RESEAU
 		do
+			create l_client.make
+			l_client.launch
 			game_library.enable_video
 			audio_library.enable_sound
 			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.

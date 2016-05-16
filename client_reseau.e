@@ -41,14 +41,14 @@ feature {NONE} --méthodes du thread
 		do
 			create l_addr_factory
 			if attached l_addr_factory.create_from_name ("localhost") as la_address then
-				create l_socket.make_client_by_address_and_port (la_address, 12345)
+				create l_socket.make_client_by_address_and_port (la_address, 1234)
 				l_socket.connect
 				from
 				until
 					must_stop
 					loop
-					l_socket.put_string ("Bonjour Serveru!%N")
-					l_socket.read_stream(20)
+					l_socket.put_string ("Bonjour Serveur!%N")
+					l_socket.read_stream(50)
 					io.put_string ("Le serveur a dit: ")
 					io.put_string (l_socket.last_string)
 					io.put_new_line
