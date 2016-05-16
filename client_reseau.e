@@ -2,6 +2,7 @@ note
 	description: "Class serveur du jeu"
 	auteur		: "Steve Duquet"
 	date        : "3 mai 2016"
+	EIS: "name=Unnamed", "protocol=URI", "src=http://www.yourwebsite.com"
 
 class
 	CLIENT_RESEAU
@@ -39,20 +40,22 @@ feature {NONE} --méthodes du thread
 			l_socket:NETWORK_STREAM_SOCKET
 		do
 			create l_addr_factory
-			l_address:= l_addr_factory.create_from_name ("localhost")
-			create l_socket.make_client_by_address_and_port (l_address, 12345)
-			l_socket.connect
-			from
-			until
-				must_stop
-				loop
-				l_socket.put_string ("Bonjour Serveru!%N")
-				l_socket.read_stream
-				io.put_string ("Le serveur a dit: ")
-				io.put_string (l_socket.last_string)
-				io.put_new_line
+			if attached l_addr_factory.create_from_name ("localhost") as la_address then
+				create l_socket.make_client_by_address_and_port (la_address, 12345)
+				l_socket.connect
+				from
+				until
+					must_stop
+					loop
+					l_socket.put_string ("Bonjour Serveru!%N")
+					l_socket.read_stream(20)
+					io.put_string ("Le serveur a dit: ")
+					io.put_string (l_socket.last_string)
+					io.put_new_line
+				end
+				l_socket.close
 			end
-			l_socket.close
+
 		end
 
 feature {NONE} -- Implémentation
