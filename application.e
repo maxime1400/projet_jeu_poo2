@@ -13,11 +13,12 @@ inherit
 	EXCEPTIONS
 
 create
-	make
+	make_serveur,
+	make_client
 
 feature {NONE} -- Constructeur
 
-	make
+	make_serveur
 		local
 			jeu: JEU
 		do
@@ -27,7 +28,23 @@ feature {NONE} -- Constructeur
 			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
 
 			create jeu.make_game
-			
+
+			image_file_library.quit_library
+			audio_library.quit_library
+			game_library.quit_library
+		end
+
+	make_client
+		local
+			jeu: JEU
+		do
+			game_library.enable_video
+			audio_library.enable_sound
+			audio_library.launch_in_thread	-- Cette fonctionnalité met à jour le contexte sonore dans un autre thread.
+			image_file_library.enable_image (true, false, false)  -- Active PNG (mais pas TIF ou JPG)
+
+			create jeu.make_game
+
 			image_file_library.quit_library
 			audio_library.quit_library
 			game_library.quit_library
