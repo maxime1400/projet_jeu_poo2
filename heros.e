@@ -34,7 +34,7 @@ feature {NONE} -- Constructeur
 			l_image:IMG_IMAGE_FILE
 		do
 			has_error := False
-			create l_image.make ("./images/perso.png")
+			create l_image.make ("./images/perso1.png")
 			if l_image.is_openable then
 				l_image.open
 				if l_image.is_open then
