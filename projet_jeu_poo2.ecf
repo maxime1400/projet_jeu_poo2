@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-14-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-14-0 http://www.eiffel.com/developers/xml/configuration-1-14-0.xsd" name="projet_jeu_poo2" uuid="1AF8A321-091E-4C51-8306-1D15B455DC0E">
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-15-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-15-0 http://www.eiffel.com/developers/xml/configuration-1-15-0.xsd" name="projet_jeu_poo2" uuid="1AF8A321-091E-4C51-8306-1D15B455DC0E">
 	<target name="projet_jeu_poo2">
-		<root class="APPLICATION" feature="make"/>
-		<option warning="true">
+		<root class="APPLICATION" feature="make_serveur"/>
+		<option warning="true" is_obsolete_routine_type="true">
 			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
 		</option>
 		<setting name="console_application" value="true"/>
@@ -12,11 +12,11 @@
 		<library name="audio_sound_file" location="$EIFFEL_LIBRARY\contrib\library\game2\audio_sound_file\audio_sound_file-safe.ecf"/>
 		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
 		<library name="eiffel_game" location="$EIFFEL_LIBRARY\contrib\library\game2\game_core\game_core-safe.ecf"/>
+		<library name="eiffel_net" location="$ISE_LIBRARY\library\net\net-safe.ecf"/>
 		<library name="game_effects" location="$EIFFEL_LIBRARY\contrib\library\game2\game_effects\game_effects-safe.ecf"/>
 		<library name="game_image_file" location="$EIFFEL_LIBRARY\contrib\library\game2\game_image_file\game_image_file-safe.ecf"/>
 		<library name="testing" location="$ISE_LIBRARY\library\testing\testing-safe.ecf"/>
 		<library name="thread" location="$ISE_LIBRARY\library\thread\thread-safe.ecf"/>
-		<library name="eiffel_net" location="$ISE_LIBRARY\library\net\net.ecf"/>
 		<cluster name="projet_jeu_poo2" location=".\" recursive="true">
 			<file_rule>
 				<exclude>/.git$</exclude>
@@ -28,6 +28,35 @@
 				<exclude>^tests$</exclude>
 			</file_rule>
 			<tests name="tests" location=".\tests\"/>
+		</cluster>
+	</target>
+	<target name="projet_jeu_poo2-client">
+		<root class="APPLICATION" feature="make_client"/>
+		<precompile name="base_mt_pre" location="$ISE_PRECOMP\base-mt-safe.ecf"/>
+		<library name="audio_client" location="$ISE_LIBRARY\contrib\library\game2\audio\audio-safe.ecf"/>
+		<library name="audio_sound_file_client" location="$ISE_LIBRARY\contrib\library\game2\audio_sound_file\audio_sound_file-safe.ecf"/>
+		<library name="base_client" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
+		<library name="eiffel_game_client" location="$EIFFEL_LIBRARY\contrib\library\game2\game_core\game_core-safe.ecf">
+			<option>
+				<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true" supplier_precondition="true"/>
+			</option>
+		</library>
+		<library name="eiffel_net_client" location="$ISE_LIBRARY\library\net\net-safe.ecf"/>
+		<library name="game_effects_client" location="$ISE_LIBRARY\contrib\library\game2\game_effects\game_effects-safe.ecf"/>
+		<library name="game_image_file_client" location="$ISE_LIBRARY\contrib\library\game2\game_image_file\game_image_file-safe.ecf"/>
+		<library name="testing_client" location="$ISE_LIBRARY\library\testing\testing-safe.ecf"/>
+		<library name="thread_client" location="$ISE_LIBRARY\library\thread\thread-safe.ecf"/>
+		<cluster name="projet_jeu_poo2_client" location=".\" recursive="true">
+			<file_rule>
+				<exclude>/.git$</exclude>
+				<exclude>/EIFGENs$</exclude>
+				<exclude>/images$</exclude>
+				<exclude>/sons$</exclude>
+			</file_rule>
+			<file_rule>
+				<exclude>^tests$</exclude>
+			</file_rule>
+			<tests name="tests_client" location=".\tests\"/>
 		</cluster>
 	</target>
 </system>
