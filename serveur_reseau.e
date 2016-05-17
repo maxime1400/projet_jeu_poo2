@@ -37,7 +37,7 @@ feature {NONE} --méthodes du thread
 			l_serveur_socket: NETWORK_STREAM_SOCKET
 		do
 			create l_serveur_socket.make_server_by_port (1234)
-			l_serveur_socket.listen (0)
+			l_serveur_socket.listen (1)
 			l_serveur_socket.accept
 			from
 			until

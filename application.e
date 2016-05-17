@@ -23,6 +23,7 @@ feature {NONE} -- Constructeur
 			jeu: JEU
 			l_serveur: SERVEUR_RESEAU
 		do
+			io.put_string("Serveur")
 			create l_serveur.make
 			l_serveur.launch
 			game_library.enable_video
@@ -42,6 +43,7 @@ feature {NONE} -- Constructeur
 			jeu: JEU
 			l_client: CLIENT_RESEAU
 		do
+			io.put_string("Client")
 			create l_client.make
 			l_client.launch
 			game_library.enable_video
