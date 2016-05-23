@@ -2,7 +2,6 @@ note
 	description: "Class serveur du jeu"
 	auteur		: "Steve Duquet"
 	date        : "3 mai 2016"
-	EIS: "name=Unnamed", "protocol=URI", "src=http://www.yourwebsite.com"
 
 class
 	CLIENT_RESEAU
@@ -19,6 +18,7 @@ create
 feature {NONE} -- Constructeur
 
 	make
+		-- Exécute la méthode d'écoute du réseau dans un thread
 		do
 			make_thread
 			must_stop:= false
@@ -27,13 +27,15 @@ feature {NONE} -- Constructeur
 feature --Accès
 
 	stop_thread
+		-- Change la variable qui arrête la boucle de la class
 		do
 			must_stop:= true
 		end
 
-feature {NONE} --méthodes du thread
+feature {NONE} -- Méthodes du thread
 
 	execute
+		-- Écoute sur le réseau
 		local
 			l_addr_factory:INET_ADDRESS_FACTORY
 			l_address: INET_ADDRESS
@@ -61,6 +63,9 @@ feature {NONE} --méthodes du thread
 feature {NONE} -- Implémentation
 
 	must_stop: BOOLEAN
+		-- variable qui arrête la boucle de la class si True
+
 	message_recu: INTEGER
+		-- Le chiffre reçu du réseau
 
 end

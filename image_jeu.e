@@ -21,12 +21,14 @@ create
 feature {NONE} -- Constructeur
 
 	nouvelle_image(a_filename:READABLE_STRING_GENERAL)
+		-- Reçoit le chemin d'une image et crée celle-ci pour le programme
 	do
 		filename:= a_filename
 		default_create
 	end
 
 	default_create
+		-- Création d'une image à partir d'un fichier
 		local
 			l_image: IMG_IMAGE_FILE
 		do

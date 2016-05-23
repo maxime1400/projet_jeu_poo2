@@ -18,6 +18,7 @@ create
 feature {NONE} -- Constructeur
 
 	make
+		-- Exécute la méthode qui envoi sur le réseau dans un thread
 		do
 			make_thread
 			must_stop:= false
@@ -26,6 +27,7 @@ feature {NONE} -- Constructeur
 feature --Accès
 
 	stop_thread
+		-- Change la variable qui arrête la boucle de la class
 		do
 			must_stop:= true
 		end
@@ -33,6 +35,7 @@ feature --Accès
 feature {NONE} --méthodes du thread
 
 	execute
+		-- envoi sur le réseau
 		local
 			l_serveur_socket: NETWORK_STREAM_SOCKET
 		do
@@ -53,6 +56,6 @@ feature {NONE} --méthodes du thread
 feature {NONE} -- Implémentation
 
 	must_stop: BOOLEAN
-	message_recu: INTEGER
+		-- variable qui arrête la boucle de la class si True
 
 end
